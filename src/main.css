@@ -187,12 +187,6 @@ p {
 	margin-bottom: var(--space);
 	position: relative
 }
-.post-entry:hover {
-	-webkit-transform: translateY(-5px);
-	transform: translateY(-5px);
-	-webkit-box-shadow: 1px 10px 30px 0 rgba(0, 0, 0, .1);
-	box-shadow: 1px 10px 30px 0 rgba(0, 0, 0, .1)
-}
 .post-entry__content .post-entry__title {
 	color: var(--title-color);
 	margin-top: 0;
