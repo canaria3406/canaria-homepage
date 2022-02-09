@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="content-type">
+	<meta charset="utf-8">
+	<meta content="webkit" name="renderer">
+	<meta content="webkit" name="force-rendering">
+	<meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
+	<meta content="True" name="HandheldFriendly">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta name=viewport content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>かなりあ</title>
+	<link href="src/main.css" rel="stylesheet">
+	<link href="src/darkmode.css" rel="stylesheet">
+	<script src="src/darkmode.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<header class="header">
+			<div class="header__left"></div>
+			<div class="header__right">
+				<a href="javascript:void(0);" id="btn-toggle-dark" rel="external nofollow noreferrer">
+				<svg height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+				</svg></a> 
+			</div>
+		</header>
+		<div class="cover">
+			<div class="cover__logo">
+				<h1><b>かなりあ</b></h1>
+			</div>
+			<div class="cover__intro">
+				<p>響け! この歌に乗せ 愛を送るよ</p>
+			</div>
+		</div>
+		<main class="main">
+			<div class="post-list">
+				<div class="post-entry content-card">
+					<div class="videobox"><div id="ytplayer"></div></div><br><div class="bg"></div>
+				</div>
+			</div>
+		</main>
+		<footer class="footer">
+			<p class="footer-copyright"><a href="https://blog.canaria.cc/">canaria</a> © 2022 </p>
+		</footer>
+	</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+	var tag = document.createElement('script');
+
+	tag.src = "https://www.youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+	var player;
+	var videotime = 0;
+
+	function onYouTubeIframeAPIReady() {
+		player = new YT.Player('ytplayer', {
+		videoId: 'C5IIoZsci8Y', 
+		events: {
+			'onReady': function(event) {
+			
+				event.target.playVideo();
+				function updateTime() {
+			        if(player && player.getCurrentTime) {
+					    videotime = player.getCurrentTime();
+						//console.log(videotime);
+						videoTimeUpdater();
+					}
+				}
+				timeupdater = setInterval(updateTime, 100);
+				
+			}
+		}
+        });
+	}
+
+	let text = "[ti: Aikotoba III][ar: GURAxKIARA]\n[00:21.72] 想いの冒険を　忘れずに全部言えるかな\n[00:28.61] 君から聞きたいよ　何回目の僕に出会った？\n[00:35.66] 僕は変わりました　新しい君に出会うために\n[00:42.71] 久しぶりだねって　言えたならここで泣こっか\n[00:49.30] 好きとかって　嫌いとかって\n[00:52.79] 何度だって愛を歌う君が\n[00:56.52] 恋しくって　嘘じゃない本当だよ\n[01:00.71] また出会おう\n[01:03.31] 僕ら“II”を嫌って　“I”に戻って\n[01:07.21] 何回だって　間違ってきたよ\n[01:11.31] 消えない後悔と　冷めない愛情が　恋を再起動する\n[01:17.17] ほら“I”を嫌って　また“II”に戻って\n[01:21.37] “III”になって　愛を繋いでいこう\n[01:25.15] 言いたい感情は　伝えたい正解は\n[01:28.25] たったひとつだけ　ありがとう\n[01:45.94] 想いの冒険は　これからもちゃんと続いていく\n[01:52.79] 3と9に乗って　言葉とか飛び越えちゃって\n[01:59.88] 君も変わりました　新しい誰かに会うために\n[02:06.79] 大人になりました　それだけで良いと思えた\n[02:13.55] 好きとかって　嫌いとかって\n[02:16.91] 何度だって愛を歌う君が\n[02:20.50] 恋しくって　嘘じゃない本当だよ\n[02:24.82] また出会おう\n[02:42.09] “恋”をして　…バカ。\n[02:45.54] “愛”にして　…バカ。\n[02:48.85] バカでいい　この先もずっとこのまま\n[02:55.12] …バカ。\n[02:57.24] 僕ら“II”を嫌って　“I”に戻って\n[03:01.07] 何回だって　間違ってきたよ\n[03:05.18] 消えない後悔と　冷めない愛情が　恋を再起動する\n[03:11.14] ほら“I”を嫌って　また“II”に戻って\n[03:15.22] “III”になって　愛を繋いでいこう\n[03:19.06] 言いたい感情は　伝えたい正解は\n[03:22.15] たったひとつだけ　ありがとう\n[03:25.90] メーデー　僕と判っても　もう抱き締めなくて易々んだよ\n[03:29.17] 終わんない愛を抱いてたくないの 　もっとちゃんと不安にしてよ\n[03:32.79] 妄想感傷代償連盟　愛を懐いて理想を号んだ\n[03:36.58] 行き場のある愛のメロディーを\n[03:39.93] 今これまでにありがとう\n[03:43.30] いつまでも君と　「こんな歌あったね」って\n[03:49.28] 出会いを数えられるように";
+
+	function parseLyric(text) {
+
+		let lyricArr = text.split('\n');
+		let result = []; 
+
+		for (i = 0; i < lyricArr.length; i++) {
+			let playTimeArr = lyricArr[i].match(/\[\d{2}:\d{2}((\.|\:)\d{2})\]/g);
+			let lineLyric = "";
+			if (lyricArr[i].split(playTimeArr).length > 0) {
+				lineLyric = lyricArr[i].split(playTimeArr);
+			}
+			if (playTimeArr != null) {
+				for (let j = 0; j < playTimeArr.length; j++) {
+					let time = playTimeArr[j].substring(1, playTimeArr[j].indexOf("]")).split(":");
+						result.push({
+							time: (parseInt(time[0]) * 60 + parseFloat(time[1])).toFixed(4),
+							content: String(lineLyric).substr(1)
+						});
+				}
+			}
+		}
+		console.log(result);
+		return result;
+	}
+	
+	let result = parseLyric(text);
+	let $ul = $("<ul></ul>");
+	for (let i = 0; i < result.length; i++) {
+		let $li = $("<li></li>").text(result[i].content);
+		$ul.append($li);
+	}
+	$(".bg").append($ul);
+
+	let lineNo = 0;
+	let preLine = 1;
+	let lineHeight = -30;
+
+	function highLight() {
+		let $li = $("li");
+		$li.eq(lineNo).addClass("active").siblings().removeClass("active");
+		if (lineNo > preLine) {
+			$ul.stop(true, true).animate({ top: (lineNo - preLine) * lineHeight });
+		}
+	}
+	
+	function videoTimeUpdater() {
+		if (lineNo == result.length) return;
+		if ($("li").eq(0).hasClass("active")) {
+			$("ul").css("top", "0");
+		}
+		lineNo = getLineNo(videotime);
+		highLight();
+		lineNo++;
+	}
+		
+	function getLineNo(videotime) {
+		if (videotime >= parseFloat(result[lineNo].time)) {
+		for (let i = result.length - 1; i >= lineNo; i--) {
+			if (videotime >= parseFloat(result[i].time)) {
+				return i;
+			}
+		}
+		} else {
+		for (let i = 0; i <= lineNo; i++) {
+			if (videotime <= parseFloat(result[i].time)) {
+				return i - 1;
+			}
+		}
+		}
+	}
+
+</script>
+</html>
