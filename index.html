@@ -80,13 +80,12 @@
 				}
 				timeupdater = setInterval(updateTime, 100);
 				
-			},
-			'onStateChange': function(event){
-				if(event.data == YT.PlayerState.ENDED){
-					videoreplay();
-					event.target.playVideo();
-				}
 			}
+			//,'onStateChange': function(event){
+			//	if(event.data === YT.PlayerState.ENDED){
+			//		event.target.playVideo();
+			//	}
+			//}
 		}
         });
 	}
@@ -163,13 +162,5 @@
 		}
 	}
 	
-	function videoreplay() {
-		lineNo = 0;
-		preLine = 1;
-		lineHeight = -30;
-		videotime = 0;
-		$("ul").css("top", "0");
-	}
-
 </script>
 </html>
