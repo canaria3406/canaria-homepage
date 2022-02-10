@@ -80,6 +80,12 @@
 				}
 				timeupdater = setInterval(updateTime, 100);
 				
+			},
+			'onStateChange': function(event){
+				if(event.data === YT.PlayerState.ENDED){
+					event.target.playVideo();
+					replayvideo();
+				}
 			}
 		}
         });
@@ -155,6 +161,11 @@
 			}
 		}
 		}
+	}
+	
+	function replayvideo() {
+		lineNo = 0;
+		$("ul").css("top", "0");
 	}
 
 </script>
