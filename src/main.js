@@ -24,11 +24,24 @@ function onYouTubeIframeAPIReady() {
             timeupdater = setInterval(updateTime, 100);
             
         }
-        //,'onStateChange': function(event){
-        //    if(event.data === YT.PlayerState.ENDED){
-        //        event.target.playVideo();
-        //    }
-        //}
+        ,'onStateChange': function(event){
+            if(event.data === YT.PlayerState.ENDED){
+                clearInterval(timeupdater);
+                lineNo = 0;
+                preLine = 1;
+                lineHeight = -30;
+                ul.style.top = "30px";
+                event.target.playVideo();
+                function updateTime() {
+                    if(player && player.getCurrentTime) {
+                        videotime = player.getCurrentTime();
+                        //console.log(videotime);
+                        videoTimeUpdater();
+                    }
+                }
+                timeupdater = setInterval(updateTime, 100);
+            }
+        }
     }
     });
 }
