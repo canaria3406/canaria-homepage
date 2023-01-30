@@ -17,7 +17,6 @@ function onYouTubeIframeAPIReady() {
             function updateTime() {
                 if(player && player.getCurrentTime) {
                     videotime = player.getCurrentTime();
-                    //console.log(videotime);
                     videoTimeUpdater();
                 }
             }
@@ -35,7 +34,6 @@ function onYouTubeIframeAPIReady() {
                 function updateTime() {
                     if(player && player.getCurrentTime) {
                         videotime = player.getCurrentTime();
-                        //console.log(videotime);
                         videoTimeUpdater();
                     }
                 }
