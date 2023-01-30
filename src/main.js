@@ -1,5 +1,4 @@
 var tag = document.createElement('script');
-
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -12,7 +11,6 @@ function onYouTubeIframeAPIReady() {
     videoId: 'DMAiZNAYJPw', 
     events: {
         'onReady': function(event) {
-        
             event.target.playVideo();
             function updateTime() {
                 if(player && player.getCurrentTime) {
@@ -21,7 +19,6 @@ function onYouTubeIframeAPIReady() {
                 }
             }
             timeupdater = setInterval(updateTime, 100);
-            
         }
         ,'onStateChange': function(event){
             if(event.data === YT.PlayerState.ENDED){
