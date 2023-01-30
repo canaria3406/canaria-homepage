@@ -1,166 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="content-type">
-	<meta charset="utf-8">
-	<meta content="webkit" name="renderer">
-	<meta content="webkit" name="force-rendering">
-	<meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
-	<meta content="True" name="HandheldFriendly">
-	<meta content="yes" name="apple-mobile-web-app-capable">
-	<meta name=viewport content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="theme-color" content="#f4f4f4">
-	<title>かなりあ</title>
-	<link rel="apple-touch-icon" sizes="180x180" href="src/logo/apple-touch-icon-next.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="src/logo/favicon-32x32-next.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="src/logo/favicon-16x16-next.png">
-	<link rel="mask-icon" href="src/logo/logo.svg" color="#f4f4f4">
-	<link href="src/main.css" rel="stylesheet">
-	<link href="src/darkmode.css" rel="stylesheet">
-	<link href="src/font-awesome/css/all.min.css" rel="stylesheet">
-	<script src="src/darkmode.js"></script>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <meta charset="utf-8">
+    <meta content="webkit" name="renderer">
+    <meta content="webkit" name="force-rendering">
+    <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="True" name="HandheldFriendly">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name=viewport content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f4f4f4">
+    <title>かなりあ</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="src/logo/apple-touch-icon-next.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="src/logo/favicon-32x32-next.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="src/logo/favicon-16x16-next.png">
+    <link rel="mask-icon" href="src/logo/logo.svg" color="#f4f4f4">
+    <link href="src/main.css" rel="stylesheet">
+    <link href="src/darkmode.css" rel="stylesheet">
+    <link href="src/font-awesome/css/all.min.css" rel="stylesheet">
+    <script src="src/darkmode.js"></script>
 </head>
-
 <body>
-	<div id="app">
-		<header class="header">
-			<div class="header__left"></div>
-			<div class="header__right">
-				<a href="javascript:void(0);" id="btn-toggle-dark" rel="external nofollow noreferrer">
-				<i class="fa-solid fa-moon"></i>
-				</a> 
-			</div>
-		</header>
-		<div class="cover">
-			<div class="cover__logo">
-				<h1><b>かなりあ</b></h1>
-			</div>
-			<div class="cover__intro">
-				<p>響け! この歌に乗せ 愛を送るよ</p>
-			</div>
-		</div>
-		<main class="main">
-			<div class="post-list">
-				<div class="post-entry content-card">
-					<div class="videobox"><div id="ytplayer"></div></div><br><div class="bg"></div>
-				</div>
-			</div>
-		</main>
-		<footer class="footer">
-			<p class="footer-copyright"><a href="https://blog.canaria.cc/">canaria</a> © 2022 </p>
-		</footer>
-	</div>
+    <div id="app">
+        <header class="header">
+            <div class="header__left"></div>
+            <div class="header__right">
+                <a href="javascript:void(0);" id="btn-toggle-dark" rel="external nofollow noreferrer">
+                <i class="fa-solid fa-moon"></i>
+                </a> 
+            </div>
+        </header>
+        <div class="cover">
+            <div class="cover__logo">
+                <h1><b>かなりあ</b></h1>
+            </div>
+            <div class="cover__intro">
+                <p>響け! この歌に乗せ 愛を送るよ</p>
+            </div>
+        </div>
+        <main class="main">
+            <div class="post-list">
+                <div class="post-entry content-card">
+                    <div class="videobox"><div id="ytplayer"></div></div><br><div class="bg"></div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <p class="footer-copyright"><a href="https://blog.canaria.cc/">canaria</a> © 2022 </p>
+        </footer>
+    </div>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-
-	var tag = document.createElement('script');
-
-	tag.src = "https://www.youtube.com/iframe_api";
-	var firstScriptTag = document.getElementsByTagName('script')[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-	var player;
-	var videotime = 0;
-
-	function onYouTubeIframeAPIReady() {
-		player = new YT.Player('ytplayer', {
-		videoId: 'DMAiZNAYJPw', 
-		events: {
-			'onReady': function(event) {
-			
-				event.target.playVideo();
-				function updateTime() {
-			        if(player && player.getCurrentTime) {
-					    videotime = player.getCurrentTime();
-						//console.log(videotime);
-						videoTimeUpdater();
-					}
-				}
-				timeupdater = setInterval(updateTime, 100);
-				
-			}
-			//,'onStateChange': function(event){
-			//	if(event.data === YT.PlayerState.ENDED){
-			//		event.target.playVideo();
-			//	}
-			//}
-		}
-        });
-	}
-
-	let text = "[ti: 愛言葉Ⅲ][ar: 百鬼あやめ]\n[00:22.61] 想いの冒険を　忘れずに全部言えるかな\n[00:29.66] 君から聞きたいよ　何回目の僕に出会った？\n[00:36.72] 僕は変わりました　新しい君に出会うために\n[00:43.50] 久しぶりだねって　言えたならここで泣こっか\n[00:50.41] 好きとかって　嫌いとかって\n[00:53.75] 何度だって愛を歌う君が\n[00:57.50] 恋しくって　嘘じゃない本当だよ\n[01:01.78] また出会おう\n[01:04.12] 僕ら“II”を嫌って　“I”に戻って\n[01:08.13] 何回だって　間違ってきたよ\n[01:12.24] 消えない後悔と　冷めない愛情が\n[01:15.15] 恋を再起動する\n[01:18.21] ほら“I”を嫌って　また“II”に戻って\n[01:22.29] “III”になって　愛を繋いでいこう\n[01:26.34] 言いたい感情は　伝えたい正解は\n[01:29.28] たったひとつだけ\n[01:31.66] ありがとう\n[01:46.89] 想いの冒険は　これからもちゃんと続いていく\n[01:53.74] 3と9に乗って　言葉とか飛び越えちゃって\n[02:00.68] 君も変わりました　新しい誰かに会うために\n[02:07.73] 大人になりました　それだけで良いと思えた\n[02:14.51] 好きとかって　嫌いとかって\n[02:17.81] 何度だって愛を歌う君が\n[02:21.52] 恋しくって　嘘じゃない本当だよ\n[02:25.57] また出会おう\n[02:42.96] “恋”をして　…バカ。\n[02:46.36] “愛”にして　…バカ。\n[02:49.81] バカでいい　この先もずっとこのまま\n[02:56.04] …バカ。\n[02:58.10] 僕ら“II”を嫌って　“I”に戻って\n[03:02.01] 何回だって　間違ってきたよ\n[03:06.21] 消えない後悔と　冷めない愛情が\n[03:09.03] 恋を再起動する\n[03:12.24] ほら“I”を嫌って　また“II”に戻って\n[03:16.17] “III”になって　愛を繋いでいこう\n[03:20.18] 言いたい感情は　伝えたい正解は\n[03:23.06] たったひとつだけ　ありがとう\n[03:26.79] メーデー　僕と判っても\n[03:28.30] もう抱き締めなくて易々んだよ\n[03:30.19] 終わんない愛を抱いてたくないの\n[03:32.14] もっとちゃんと不安にしてよ\n[03:33.75] 妄想感傷代償連盟　愛を懐いて理想を号んだ\n[03:37.50] 行き場のある愛のメロディーを\n[03:40.47] 今これまでにありがとう\n[03:44.10] いつまでも君と　「こんな歌あったね」って\n[03:50.12] 出会いを数えられるように";
-
-	function parseLyric(text) {
-
-		let lyricArr = text.split('\n');
-		let result = []; 
-
-		for (i = 0; i < lyricArr.length; i++) {
-			let playTimeArr = lyricArr[i].match(/\[\d{2}:\d{2}((\.|\:)\d{2})\]/g);
-			let lineLyric = "";
-			if (lyricArr[i].split(playTimeArr).length > 0) {
-				lineLyric = lyricArr[i].split(playTimeArr);
-			}
-			if (playTimeArr != null) {
-				for (let j = 0; j < playTimeArr.length; j++) {
-					let time = playTimeArr[j].substring(1, playTimeArr[j].indexOf("]")).split(":");
-						result.push({
-							time: (parseInt(time[0]) * 60 + parseFloat(time[1])).toFixed(4),
-							content: String(lineLyric).substr(1)
-						});
-				}
-			}
-		}
-		return result;
-	}
-	
-	let result = parseLyric(text);
-	let $ul = $("<ul></ul>");
-	for (let i = 0; i < result.length; i++) {
-		let $li = $("<li></li>").text(result[i].content);
-		$ul.append($li);
-	}
-	$(".bg").append($ul);
-
-	let lineNo = 0;
-	let preLine = 1;
-	let lineHeight = -30;
-
-	function highLight() {
-		let $li = $("li");
-		$li.eq(lineNo).addClass("active").siblings().removeClass("active");
-		if (lineNo > preLine) {
-			$ul.stop(true, true).animate({ top: (lineNo - preLine) * lineHeight });
-		}
-	}
-	
-	function videoTimeUpdater() {
-		if (lineNo == result.length) return;
-		if ($("li").eq(0).hasClass("active")) {
-			$("ul").css("top", "0");
-		}
-		lineNo = getLineNo(videotime);
-		highLight();
-		lineNo++;
-	}
-		
-	function getLineNo(videotime) {
-		if (videotime >= parseFloat(result[lineNo].time)) {
-		for (let i = result.length - 1; i >= lineNo; i--) {
-			if (videotime >= parseFloat(result[i].time)) {
-				return i;
-			}
-		}
-		} else {
-		for (let i = 0; i <= lineNo; i++) {
-			if (videotime <= parseFloat(result[i].time)) {
-				return i - 1;
-			}
-		}
-		}
-	}
-	
-</script>
+<script src="src/main.js"></script>
 </html>
