@@ -1,8 +1,3 @@
-let tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-let firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 let player;
 let videotime = 0;
 let lineNo = 0;
@@ -14,6 +9,15 @@ const lyricArr = Object.values({lyric1, lyric2});
 const randomInt = Math.floor(Math.random() * videoArr.length);
 const videoID = videoArr[randomInt];
 const lyric = lyricArr[randomInt];
+
+let result = parseLyric(lyric);
+let ul = document.createElement("ul");
+for (let i = 0; i < result.length; i++) {
+    let li = document.createElement("li");
+    li.textContent = result[i].content;
+    ul.appendChild(li);
+}
+document.querySelector(".bg").appendChild(ul);
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("ytplayer", {
@@ -73,15 +77,6 @@ function parseLyric(lyric) {
     }
     return result;
 }
-
-let result = parseLyric(lyric);
-let ul = document.createElement("ul");
-for (let i = 0; i < result.length; i++) {
-        let li = document.createElement("li");
-        li.textContent = result[i].content;
-        ul.appendChild(li);
-}
-document.querySelector(".bg").appendChild(ul);
 
 function highLight() {
     let lis = document.querySelectorAll("li");
