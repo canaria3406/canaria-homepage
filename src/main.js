@@ -1,6 +1,6 @@
-let tag = document.createElement('script');
+let tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
-let firstScriptTag = document.getElementsByTagName('script')[0];
+let firstScriptTag = document.getElementsByTagName("script")[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 let player;
@@ -16,10 +16,10 @@ const videoID = videoArr[randomInt];
 const lyric = lyricArr[randomInt];
 
 function onYouTubeIframeAPIReady() {
-    player = new YT.Player('ytplayer', {
+    player = new YT.Player("ytplayer", {
         videoId: videoID,
         events: {
-            'onReady': function(event) {
+            "onReady": function(event) {
                 event.target.playVideo();
                 function updateTime() {
                     if(player && player.getCurrentTime) {
@@ -29,7 +29,7 @@ function onYouTubeIframeAPIReady() {
                 }
                 timeupdater = setInterval(updateTime, 100);
             }
-            ,'onStateChange': function(event){
+            ,"onStateChange": function(event){
                 if(event.data === YT.PlayerState.ENDED){
                     clearInterval(timeupdater);
                     lineNo = 0;
@@ -52,7 +52,7 @@ function onYouTubeIframeAPIReady() {
 
 function parseLyric(lyric) {
 
-    let lyricArr = lyric.split('\n');
+    let lyricArr = lyric.split("\n");
     let result = []; 
 
     for (i = 0; i < lyricArr.length; i++) {
