@@ -9,8 +9,8 @@ let lineNo = 0;
 let preLine = 1;
 let lineHeight = -30;
 
-const videoArr = Object.values({ videoID1, videoID2, videoID3 });
-const lyricArr = Object.values({ lyric1, lyric2, lyric3 });
+const videoArr = Object.values({ videoID1, videoID2, videoID3, videoID4 });
+const lyricArr = Object.values({ lyric1, lyric2, lyric3, lyric4 });
 const randomInt = Math.floor(Math.random() * videoArr.length);
 const videoID = videoArr[randomInt];
 const lyric = lyricArr[randomInt];
