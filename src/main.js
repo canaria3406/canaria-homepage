@@ -40,6 +40,8 @@ function onYouTubeIframeAPIReady() {
             },
             "onStateChange": function(event) {
                 if (event.data === YT.PlayerState.ENDED) {
+                    location.reload();
+                    /*
                     clearInterval(timeupdater);
                     lineNo = 0;
                     preLine = 1;
@@ -53,6 +55,7 @@ function onYouTubeIframeAPIReady() {
                         }
                     }
                     timeupdater = setInterval(updateTime, 100);
+                    */
                 }
             }
         }
