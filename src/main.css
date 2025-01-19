@@ -329,6 +329,11 @@ p {
 	border-radius: 5px
 }
 .header .header__right #btn-toggle-dark {
+	font-size: 18px;
+	padding: 16px 10px
+}
+.header .header__right #btn-toggle-social {
+	font-size: 18px;
 	padding: 16px 10px
 }
 @-webkit-keyframes slide-down {
