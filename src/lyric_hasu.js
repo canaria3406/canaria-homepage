@@ -45,21 +45,3 @@ const lyric1 = `[ti: AURORA FLOWER][ar: スリーズブーケ＆DOLLCHESTRA＆�
 [03:48.50] そうだ　好きだなってさ　思うんだ
 [04:00.00] 　
 `;
-
-const videoID2 = "9bYIbe4uzIQ";
-const lyric2 = `[ti: KEY of Like！][ar: スリーズブーケ＆DOLLCHESTRA＆みらくらぱーく！]
-[03:45.30] あきらめない自分のことが
-[03:48.50] そうだ 好きだなってさ思うんだ
-`;
-
-const videoID3 = "y7CiaEUtqeI";
-const lyric3 = `[ti: Link to the FUTURE][ar: スリーズブーケ＆DOLLCHESTRA＆みらくらぱーく！]
-[03:45.30] あきらめない自分のことが
-[03:48.50] そうだ 好きだなってさ思うんだ
-`;
- 
-const videoID4 = "huZSM7Mu0a0";
-const lyric4 = `[ti: Bloom the smile, Bloom the dream!][ar: 蓮ノ空女学院スクールアイドルクラブ]
-[03:45.30] あきらめない自分のことが
-[03:48.50] そうだ 好きだなってさ思うんだ
-`;
