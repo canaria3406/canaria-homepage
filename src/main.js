@@ -8,14 +8,16 @@ let videotime = 0;
 let lineNo = 0;
 let preLine = 1;
 let lineHeight = -30;
+let currentLang = 'jp'; // 'jp' for Japanese, 'zh' for Chinese
 
 const videoArr = Object.values({ videoID1 });
 const lyricArr = Object.values({ lyric1 });
+const lyricZHArr = Object.values({ lyricZH1 });
 const randomInt = Math.floor(Math.random() * videoArr.length);
 const videoID = videoArr[randomInt];
-const lyric = lyricArr[randomInt];
+let currentLyric = lyricArr[randomInt];
 
-let result = parseLyric(lyric);
+let result = parseLyric(currentLyric);
 let ul = document.createElement("ul");
 for (let i = 0; i < result.length; i++) {
     let li = document.createElement("li");
@@ -23,6 +25,51 @@ for (let i = 0; i < result.length; i++) {
     ul.appendChild(li);
 }
 document.querySelector(".bg").appendChild(ul);
+
+// Language toggle button functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const langBtn = document.getElementById('btn-toggle-lang');
+    if (langBtn) {
+        langBtn.addEventListener('click', toggleLanguage);
+    }
+});
+
+function toggleLanguage() {
+    const langBtn = document.getElementById('btn-toggle-lang');
+    if (currentLang === 'jp') {
+        // Switch to Chinese
+        currentLang = 'zh';
+        currentLyric = lyricZHArr[randomInt];
+        if (langBtn) langBtn.title = '切換語言 (中文)';
+    } else {
+        // Switch to Japanese
+        currentLang = 'jp';
+        currentLyric = lyricArr[randomInt];
+        if (langBtn) langBtn.title = '切換語言 (日文)';
+    }
+    
+    // Update lyrics
+    result = parseLyric(currentLyric);
+    const ul = document.querySelector("ul");
+    ul.innerHTML = ''; // Clear existing lyrics
+    
+    for (let i = 0; i < result.length; i++) {
+        let li = document.createElement("li");
+        li.textContent = result[i].content;
+        ul.appendChild(li);
+    }
+    
+    // Reset line tracking
+    lineNo = 0;
+    preLine = 1;
+    ul.style.top = "30px";
+    ul.style.transition = "none";
+    
+    // Reapply active class if video is playing
+    highLight();
+    ul.style.transition = "top 0.5s ease-in-out";
+}
+
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("ytplayer", {

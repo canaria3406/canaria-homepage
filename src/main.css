@@ -331,6 +331,9 @@ p {
 .header .header__right #btn-toggle-dark {
 	padding: 16px 10px
 }
+.header .header__right #btn-toggle-lang {
+	padding: 16px 10px
+}
 @-webkit-keyframes slide-down {
 	0% {
 		opacity: 0;
