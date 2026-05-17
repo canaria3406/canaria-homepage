@@ -424,6 +424,7 @@ p {
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
+	white-space: nowrap;
 }
 
 .bg ul li.active {
