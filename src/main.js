@@ -8,14 +8,14 @@ let videotime = 0;
 let lineNo = 0;
 let preLine = 1;
 let lineHeight = -30;
-let currentLang = 'jp'; // 'jp' for Japanese, 'zh' for Chinese
+let currentLang = 'zh'; // 'jp' for Japanese, 'zh' for Chinese
 
 const videoArr = Object.values({ videoID1 });
 const lyricArr = Object.values({ lyric1 });
 const lyricZHArr = Object.values({ lyricZH1 });
 const randomInt = Math.floor(Math.random() * videoArr.length);
 const videoID = videoArr[randomInt];
-let currentLyric = lyricArr[randomInt];
+let currentLyric = lyricZHArr[randomInt];
 
 let result = parseLyric(currentLyric);
 let ul = document.createElement("ul");
