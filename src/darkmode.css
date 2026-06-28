@@ -37,6 +37,9 @@
 	:root:not([data-user-color-scheme]) table tr:not(.code):not(.gutter):nth-child(2n) {
 		background-color: #272727
 	}
+	:root:not([data-user-color-scheme]) .bg ul li.active {
+		color: white;
+	}
 }
 [data-user-color-scheme=dark] {
 	--color-mode: 'dark';
@@ -76,4 +79,12 @@
 }
 [data-user-color-scheme=dark] .bg ul li.active {
 	color: white;
+}
+[data-user-color-scheme=light] .bg ul li.active {
+	color: black;
+}
+@media(prefers-color-scheme:light) {
+	:root:not([data-user-color-scheme]) .bg ul li.active {
+		color: black;
+	}
 }
