@@ -1,0 +1,270 @@
+/* Header styles reused from ermiana-homepage/src/main.css. */
+.site-header {
+    width: min(1180px, calc(100% - 40px));
+    height: 76px;
+    margin: 16px auto 0;
+    padding: 0 16px 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border: 1px solid var(--line);
+    background: var(--glass);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 20px;
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+}
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+}
+.brand-avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    overflow: visible;
+}
+.brand-avatar-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* ermiana's light palette for the shared language and theme controls. */
+:root[data-theme="light"] .header-prefs {
+    --prefs-bg: rgba(46, 72, 113, .06);
+    --prefs-hover: rgba(46, 72, 113, .08);
+    --prefs-ink: #617287;
+    --prefs-hover-ink: #1c2f5a;
+    --prefs-divider: rgba(46, 72, 113, .3);
+    --prefs-focus: #366182;
+    --prefs-check: #2e4871;
+}
+
+.header-prefs {
+    height: 42px;
+    padding: 3px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 12px;
+    background: var(--prefs-bg, var(--tint));
+}
+.lang-trigger,
+.theme-toggle {
+    position: relative;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--prefs-ink, var(--muted));
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+.lang-switch {
+    position: relative;
+    display: flex;
+}
+.lang-trigger {
+    gap: 6px;
+    padding: 0 8px 0 10px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .01em;
+}
+.theme-toggle {
+    width: 36px;
+    padding: 0;
+}
+.lang-trigger:hover,
+.lang-switch.is-open .lang-trigger,
+.theme-toggle:hover {
+    background: var(--prefs-hover, var(--hover));
+    color: var(--prefs-hover-ink, var(--ink));
+}
+.pref-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.lang-chevron {
+    width: 13px;
+    height: 13px;
+    margin-left: -2px;
+    stroke-width: 2.2;
+    opacity: .7;
+    transition: transform .2s ease;
+}
+.lang-switch.is-open .lang-chevron {
+    transform: rotate(180deg);
+}
+.lang-current {
+    min-width: 2em;
+    text-align: center;
+}
+/* Language popover */
+.lang-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: -3px;
+    z-index: 30;
+    min-width: 176px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--panel-shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px) scale(.98);
+    transform-origin: top right;
+    transition: opacity .16s ease, transform .16s ease, visibility 0s linear .16s;
+}
+.lang-switch.is-open .lang-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity .16s ease, transform .16s ease, visibility 0s;
+}
+.lang-option {
+    width: 100%;
+    min-height: 40px;
+    padding: 0 10px 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--prefs-ink, var(--muted));
+    font: inherit;
+    font-size: 14px;
+    font-weight: 550;
+    text-align: left;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+.lang-option:hover,
+.lang-option:focus-visible {
+    background: var(--prefs-hover, var(--hover));
+    color: var(--prefs-hover-ink, var(--ink));
+}
+.site-header .lang-option:focus-visible {
+    outline: 2px solid var(--prefs-focus, var(--accent));
+    outline-offset: -2px;
+}
+.lang-option[aria-current="true"] {
+    color: var(--prefs-hover-ink, var(--ink));
+    font-weight: 700;
+}
+.lang-check {
+    width: 16px;
+    height: 16px;
+    stroke: var(--prefs-check, var(--accent));
+    stroke-width: 2.2;
+    opacity: 0;
+}
+.lang-option[aria-current="true"] .lang-check {
+    opacity: 1;
+}
+.prefs-divider {
+    width: 1px;
+    height: 16px;
+    margin: 0 2px;
+    background: var(--prefs-divider, var(--line-strong));
+}
+.theme-icon-sun,
+[data-theme="dark"] .theme-icon-moon {
+    display: none;
+}
+[data-theme="dark"] .theme-icon-sun {
+    display: block;
+}
+
+.site-header .brand,
+.site-footer .brand {
+    color: var(--ink);
+}
+.site-header button:focus-visible,
+.site-header a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.site-header :is(.lang-trigger, .theme-toggle):focus-visible {
+    outline-color: var(--prefs-focus, var(--accent));
+}
+
+.site-header,
+.project-feature,
+.site-footer {
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 680px) {
+    .site-header {
+        width: calc(100% - 24px);
+        height: 66px;
+        margin-top: 10px;
+        padding-right: 10px;
+        top: 8px;
+    }
+    .brand-avatar {
+        width: 38px;
+        height: 38px;
+    }
+    .site-header {
+        gap: 10px;
+    }
+    .header-tools {
+        gap: 8px;
+    }
+    .header-prefs {
+        height: 40px;
+    }
+    .lang-trigger,
+    .theme-toggle {
+        height: 34px;
+    }
+    .theme-toggle {
+        width: 34px;
+    }
+    .lang-trigger {
+        padding: 0 6px 0 8px;
+        font-size: 12px;
+    }
+    .lang-globe {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-header * {
+        transition-duration: .01ms;
+    }
+}
