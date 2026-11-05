@@ -205,7 +205,8 @@ applyLang(currentLang);
 window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player("ytplayer", {
         videoId: currentTrack.videoId,
-        playerVars: { playsinline: 1 },
+        // rel: 0 limits related videos (pause and end screens) to the playing video's channel.
+        playerVars: { playsinline: 1, rel: 0 },
         events: {
             onReady({ target }) {
                 target.getIframe().classList.add("player-ready");
@@ -218,6 +219,13 @@ window.onYouTubeIframeAPIReady = function () {
                     selectTrack();
                     renderLyrics();
                     target.loadVideoById(currentTrack.videoId);
+                }
+            },
+            // The page shows its own lyrics, so switch off YouTube's default caption track each time
+            // the captions module loads (once per video). Viewers can still turn CC back on.
+            onApiChange({ target }) {
+                if (target.getOptions().includes("captions")) {
+                    target.setOption("captions", "track", {});
                 }
             },
             onError({ target }) {
