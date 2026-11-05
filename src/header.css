@@ -43,6 +43,38 @@
     align-items: center;
     gap: 10px;
 }
+/* Reuse ermiana's navigation CTA, including its theme colors. */
+.nav-cta {
+    --nav-cta-bg: #2e4871;
+    --nav-cta-hover: #366182;
+    --nav-cta-ink: #fff;
+    height: 42px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background .2s;
+    white-space: nowrap;
+    background: var(--nav-cta-bg);
+    color: var(--nav-cta-ink);
+}
+.nav-cta:hover {
+    background: var(--nav-cta-hover);
+}
+:root[data-theme="dark"] .nav-cta {
+    --nav-cta-bg: #dce9f5;
+    --nav-cta-hover: #fff;
+    --nav-cta-ink: #10192b;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .nav-cta {
+        --nav-cta-bg: #dce9f5;
+        --nav-cta-hover: #fff;
+        --nav-cta-ink: #10192b;
+    }
+}
 /* ermiana's light palette for the shared language and theme controls. */
 :root[data-theme="light"] .header-prefs {
     --prefs-bg: rgba(46, 72, 113, .06);
@@ -247,6 +279,9 @@
     }
     .header-prefs {
         height: 40px;
+    }
+    .nav-cta {
+        display: none;
     }
     .lang-trigger,
     .theme-toggle {
