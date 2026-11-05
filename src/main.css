@@ -250,6 +250,7 @@ a {
 .project-feature {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     gap: 1.25rem;
     padding: clamp(1.25rem, 3vw, 2rem);
     transition: border-color .2s ease, box-shadow .2s ease;
@@ -262,8 +263,9 @@ a {
 
 .project-art {
     position: relative;
-    flex: 1;
-    min-height: 8.5rem;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
     aspect-ratio: 1870 / 841;
     overflow: hidden;
     border-radius: 16px;
@@ -289,6 +291,8 @@ a {
     font-size: clamp(1.35rem, 2.5vw, 1.85rem);
     line-height: 1.1;
     letter-spacing: -.035em;
+    /* Balance the lowercase wordmark's visible glyphs with the centered robot icon. */
+    transform: translateY(-.05em);
 }
 
 .project-feature-copy > p {
@@ -386,7 +390,6 @@ a {
 .project-icon, .project-arrow {
     display: grid;
     place-items: center;
-    border: 1px solid var(--line);
     color: var(--accent);
 }
 
@@ -394,6 +397,7 @@ a {
     grid-column: 1;
     width: 2.5rem;
     height: 2.5rem;
+    border: 1px solid var(--line);
     border-radius: 10px;
     background: var(--tint);
 }
@@ -402,13 +406,25 @@ a {
     grid-column: 3;
     width: 1.9rem;
     height: 1.9rem;
-    border-radius: 50%;
-    transition: background .2s ease, transform .2s ease;
+    color: var(--muted);
+    transition: color .2s ease, transform .2s ease;
+}
+
+.project-arrow svg,
+.footer-action svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .project-row:is(:hover, :focus-visible) .project-arrow {
     transform: translate(2px, -2px);
-    background: var(--hover);
+    color: var(--accent);
 }
 
 /* Footer styles reused from ermiana-homepage/src/main.css. */
@@ -474,6 +490,10 @@ a {
     transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
     background: var(--footer-action-bg, var(--surface));
     color: var(--footer-action-ink, var(--accent));
+}
+.footer-action svg {
+    width: 1em;
+    height: 1em;
 }
 .footer-action:hover {
     transform: translateY(-2px);
