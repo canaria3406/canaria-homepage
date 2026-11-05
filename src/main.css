@@ -169,19 +169,43 @@ a {
     --lyric-fade: calc(var(--lyric-anchor-height) * .15);
     position: relative;
     height: var(--lyric-height);
+    /* Safari < 16 lacks overflow: clip; hidden keeps the list from extending the page there. */
     overflow: hidden;
-    scroll-behavior: smooth;
+    overflow: clip;
     text-align: center;
+    -webkit-mask-image: linear-gradient(transparent, var(--ink) var(--lyric-fade),
+        var(--ink) calc(100% - var(--lyric-fade)), transparent);
     mask-image: linear-gradient(transparent, var(--ink) var(--lyric-fade),
         var(--ink) calc(100% - var(--lyric-fade)), transparent);
 }
 
+.bg::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: calc(var(--lyric-anchor-height) / 2 - var(--lyric-line-height) / 2);
+    height: var(--lyric-line-height);
+    border-radius: 6px;
+    background: var(--tint);
+    opacity: 0;
+    transform: scaleY(var(--lyric-highlight-scale, 1));
+    /* main.js sets the timing so a wrapped cue's highlight resizes in step with the list's move. */
+    transition: opacity .2s ease, transform var(--lyric-move-duration, 0s) var(--lyric-move-easing, ease);
+    pointer-events: none;
+}
+
+.bg.has-active-line::before {
+    opacity: 1;
+}
+
 .bg ul {
+    position: relative;
     margin: 0;
     /* Top padding puts the first cue on the anchor slot; bottom padding lets the last cue reach it. */
     padding: calc(var(--lyric-anchor-height) / 2 - var(--lyric-line-height) / 2) 0
         calc(var(--lyric-height) - var(--lyric-anchor-height) / 2 - var(--lyric-line-height) / 2);
     list-style: none;
+    transform: translate3d(0, 0, 0);
 }
 
 .bg li, .bg p {
@@ -190,14 +214,15 @@ a {
     border-radius: 6px;
     color: var(--muted);
     font-size: .88rem;
+    /* Keep wrapping stable when the active cue changes. */
+    font-weight: 500;
     line-height: 1.5;
     overflow-wrap: anywhere;
+    transition: color .26s ease;
 }
 
 .bg li.active {
-    background: var(--tint);
     color: var(--ink);
-    font-weight: 720;
 }
 
 .hero-scroll {
@@ -600,7 +625,7 @@ a {
 
     .hero {
         row-gap: .75rem;
-        padding-block: 1.25rem 1rem;
+        padding-block: 2.75rem 1rem;
     }
 
     .hero-media {
@@ -645,11 +670,11 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    html, .bg {
+    html {
         scroll-behavior: auto;
     }
 
-    .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow, .footer-action {
+    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow, .footer-action {
         transition: none;
     }
 

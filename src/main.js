@@ -5,6 +5,9 @@ const tracks = [
 const lyricViewport = document.querySelector(".bg");
 const lyricList = document.createElement("ul");
 lyricViewport.append(lyricList);
+const lyricMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const LYRIC_MOVE = { duration: 460, easing: "cubic-bezier(.22, .61, .36, 1)" };
+lyricViewport.style.setProperty("--lyric-move-easing", LYRIC_MOVE.easing);
 
 const langSwitch = document.querySelector('[data-lang-switch]');
 const langTrigger = langSwitch.querySelector('.lang-trigger');
@@ -25,7 +28,8 @@ try {
 } catch { /* storage unavailable */ }
 let lyrics = [];
 let activeLine = -1;
-let activeTop = 0; // Last scroll target; resizes re-align only when the layout moves it.
+let activeTop = 0; // Last translation target; resizes re-align only when the layout moves it.
+let lyricAnimation;
 
 function parseLyrics(source) {
     const lines = [];
@@ -63,12 +67,38 @@ function getActiveTop() {
     // Centering (not bottom-aligning) keeps wrapped cues from hiding the previous line.
     const anchorTop = parseFloat(getComputedStyle(lyricList).paddingTop) || 0;
     const cueHeight = parseFloat(getComputedStyle(current).minHeight) || 0;
-    return current.offsetTop - anchorTop + (current.offsetHeight - cueHeight) / 2;
+    // The shared translation cancels out; fractional coordinates avoid rounded-pixel jumps.
+    const cue = current.getBoundingClientRect();
+    const list = lyricList.getBoundingClientRect();
+    return Math.max(0, cue.top - list.top - anchorTop + (cue.height - cueHeight) / 2);
+}
+
+function updateLyricHighlight() {
+    const current = lyricList.children[activeLine];
+    lyricViewport.classList.toggle("has-active-line", Boolean(current));
+    if (current) {
+        const lineHeight = parseFloat(getComputedStyle(current).minHeight) || current.offsetHeight || 1;
+        lyricViewport.style.setProperty("--lyric-highlight-scale", current.getBoundingClientRect().height / lineHeight);
+    }
 }
 
 function scrollToActiveLine(behavior) {
-    activeTop = getActiveTop();
-    lyricViewport.scrollTo({ top: activeTop, behavior });
+    const top = getActiveTop();
+    const animate = behavior !== "instant" && !lyricMotion.matches && Math.abs(top - activeTop) >= 1;
+    // Retarget from the visible position so a fast cue can continue an unfinished animation.
+    const from = animate ? getComputedStyle(lyricList).transform : null;
+    lyricAnimation?.cancel();
+    lyricAnimation = null;
+    activeTop = top;
+    const transform = `translate3d(0, ${-top}px, 0)`;
+    lyricList.style.transform = transform;
+    // Resize the highlight with the list's timing, or instantly when the list jumps. Only wrapped
+    // cues change its scale, so single-line cues are unaffected.
+    lyricViewport.style.setProperty("--lyric-move-duration", animate ? `${LYRIC_MOVE.duration}ms` : "0s");
+    updateLyricHighlight();
+    if (animate) {
+        lyricAnimation = lyricList.animate([{ transform: from }, { transform }], LYRIC_MOVE);
+    }
 }
 
 function syncLyrics(time, behavior = "auto") {
@@ -93,9 +123,10 @@ function syncLyrics(time, behavior = "auto") {
 
 // syncLyrics only scrolls when the cue changes, so re-align when the layout moves the active cue
 // (e.g. lines above it re-wrap), even while paused. Comparing with the last target leaves the
-// smooth scroll of a cue change alone.
+// cue-change animation alone.
 function realignActiveLine() {
     if (Math.abs(getActiveTop() - activeTop) >= 1) scrollToActiveLine("instant");
+    else updateLyricHighlight();
 }
 
 const lyricResizeObserver = new ResizeObserver(realignActiveLine);
@@ -103,6 +134,7 @@ lyricResizeObserver.observe(lyricViewport);
 lyricResizeObserver.observe(lyricList);
 // A font swap can re-wrap lines while the list keeps the same total height, which the observer misses.
 document.fonts.addEventListener("loadingdone", realignActiveLine);
+lyricMotion.addEventListener("change", () => scrollToActiveLine("instant"));
 
 function selectTrack() {
     currentTrack = tracks[Math.floor(Math.random() * tracks.length)];
