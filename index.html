@@ -60,23 +60,27 @@
                 </figure>
 
                 <div class="bg" role="region" aria-label="歌詞">
-                    <noscript><p>啟用 JavaScript 後即可顯示歌詞。</p></noscript>
+                    <noscript><p>啟用 JavaScript 以顯示歌詞。</p></noscript>
                 </div>
             </div>
 
-            <a class="hero-scroll" href="#projects" aria-label="前往精選專案"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+            <a class="hero-scroll" href="#projects" aria-label="前往我的專案"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
         </section>
 
         <div class="details">
-            <section class="section-shell projects" id="projects" aria-label="精選專案">
-                <a class="project-feature" href="https://ermiana.canaria.cc/" aria-labelledby="ermiana-title" aria-describedby="ermiana-description">
+            <section class="section-shell projects" id="projects" aria-label="我的專案">
+                <a class="project-feature" href="https://ermiana.canaria.cc/" aria-labelledby="ermiana-title" aria-describedby="ermiana-description ermiana-stats">
                     <div class="project-art" aria-hidden="true">
                         <img src="src/projects/ermiana-banner.png" width="1870" height="841" loading="lazy" decoding="async" alt="">
                     </div>
                     <div class="project-feature-copy">
                         <span class="project-icon" aria-hidden="true"><i class="fa-solid fa-robot"></i></span>
                         <h2 id="ermiana-title">ermiana</h2>
-                        <p id="ermiana-description">在訊息送出後自動解析連結，將內容整理成 Discord 裡可以直接閱讀的預覽</p>
+                        <p id="ermiana-description">自動解析訊息中的連結，產生可直接在 Discord 閱讀的內容預覽</p>
+                        <ul class="project-stats" id="ermiana-stats" role="list" aria-label="專案規模">
+                            <li><strong>6,000+</strong><span>伺服器</span></li>
+                            <li><strong>1,000,000+</strong><span>使用者</span></li>
+                        </ul>
                     </div>
                 </a>
 
@@ -85,7 +89,7 @@
                         <a class="project-row" href="https://github.com/canaria3406/hoyolab-auto-sign" aria-labelledby="hoyolab-title" aria-describedby="hoyolab-description">
                             <span class="project-icon" aria-hidden="true"><i class="fa-solid fa-calendar-check"></i></span>
                             <h2 id="hoyolab-title">hoyolab-auto-sign</h2>
-                            <p id="hoyolab-description">自動領取 HoYoLAB 每日簽到獎勵的免費開源解決方案</p>
+                            <p id="hoyolab-description">自動領取 HoYoLAB 每日簽到獎勵的開源工具</p>
                             <span class="project-arrow" aria-hidden="true">↗</span>
                         </a>
                     </li>
@@ -93,7 +97,7 @@
                         <a class="project-row" href="https://github.com/canaria3406/canaria-url" aria-labelledby="url-title" aria-describedby="url-description">
                             <span class="project-icon" aria-hidden="true"><i class="fa-solid fa-link"></i></span>
                             <h2 id="url-title">canaria-url</h2>
-                            <p id="url-description">用 Google Apps Script 和試算表打造的免費開源短網址套件</p>
+                            <p id="url-description">用 Google Apps Script 和試算表打造的免費開源短網址服務</p>
                             <span class="project-arrow" aria-hidden="true">↗</span>
                         </a>
                     </li>
@@ -109,7 +113,7 @@
                         <a class="project-row" href="https://nakiri.canaria.cc/" aria-labelledby="nakiri-title" aria-describedby="nakiri-description">
                             <span class="project-icon" aria-hidden="true"><i class="fa-solid fa-tower-broadcast"></i></span>
                             <h2 id="nakiri-title">百鬼今天開台了嗎</h2>
-                            <p id="nakiri-description">查看百鬼あやめ的直播狀態，以及距離上次開台多久</p>
+                            <p id="nakiri-description">查看百鬼あやめ的直播狀態，以及距離上次開台的時間</p>
                             <span class="project-arrow" aria-hidden="true">↗</span>
                         </a>
                     </li>
@@ -140,8 +144,7 @@
             <p>canaria<span class="footer-at">@</span>2022-2026</p>
             <div class="footer-meta">
                 <div class="footer-legal">
-                    <a href="https://lit.link/canaria3406" target="_blank" rel="noreferrer">傳送門</a>
-                    <a href="#top">回到頁首</a>
+                    <a href="#top">回頁首</a>
                 </div>
             </div>
         </div>

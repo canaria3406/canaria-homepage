@@ -25,6 +25,7 @@ try {
 } catch { /* storage unavailable */ }
 let lyrics = [];
 let activeLine = -1;
+let activeTop = 0; // Last scroll target; resizes re-align only when the layout moves it.
 
 function parseLyrics(source) {
     const lines = [];
@@ -51,8 +52,23 @@ function renderLyrics(time = 0) {
     });
     lyricList.replaceChildren(...items);
     activeLine = -1;
-    lyricViewport.scrollTo({ top: 0, behavior: "instant" });
+    scrollToActiveLine("instant");
     syncLyrics(time, "instant");
+}
+
+function getActiveTop() {
+    const current = lyricList.children[activeLine];
+    if (!current) return 0;
+    // Center the active cue on the anchor slot, where the list's top padding places the first cue.
+    // Centering (not bottom-aligning) keeps wrapped cues from hiding the previous line.
+    const anchorTop = parseFloat(getComputedStyle(lyricList).paddingTop) || 0;
+    const cueHeight = parseFloat(getComputedStyle(current).minHeight) || 0;
+    return current.offsetTop - anchorTop + (current.offsetHeight - cueHeight) / 2;
+}
+
+function scrollToActiveLine(behavior) {
+    activeTop = getActiveTop();
+    lyricViewport.scrollTo({ top: activeTop, behavior });
 }
 
 function syncLyrics(time, behavior = "auto") {
@@ -72,11 +88,21 @@ function syncLyrics(time, behavior = "auto") {
     const current = lyricList.children[activeLine];
     current?.classList.add("active");
     current?.setAttribute("aria-current", "true");
-    const top = current
-        ? current.offsetTop + (current.offsetHeight - lyricViewport.clientHeight) / 2
-        : 0;
-    lyricViewport.scrollTo({ top, behavior });
+    scrollToActiveLine(behavior);
 }
+
+// syncLyrics only scrolls when the cue changes, so re-align when the layout moves the active cue
+// (e.g. lines above it re-wrap), even while paused. Comparing with the last target leaves the
+// smooth scroll of a cue change alone.
+function realignActiveLine() {
+    if (Math.abs(getActiveTop() - activeTop) >= 1) scrollToActiveLine("instant");
+}
+
+const lyricResizeObserver = new ResizeObserver(realignActiveLine);
+lyricResizeObserver.observe(lyricViewport);
+lyricResizeObserver.observe(lyricList);
+// A font swap can re-wrap lines while the list keeps the same total height, which the observer misses.
+document.fonts.addEventListener("loadingdone", realignActiveLine);
 
 function selectTrack() {
     currentTrack = tracks[Math.floor(Math.random() * tracks.length)];

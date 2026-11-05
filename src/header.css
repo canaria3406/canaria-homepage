@@ -220,6 +220,7 @@
 
 .site-header,
 .project-feature,
+.project-list,
 .site-footer {
     font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
     line-height: 1.6;
