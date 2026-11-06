@@ -44,10 +44,6 @@ h2, p, figure {
     margin: 0;
 }
 
-.section-shell {
-    width: min(1180px, calc(100% - 48px));
-}
-
 .hero {
     --header-offset: 92px; /* Header height and top margin. */
     min-height: calc(100vh - var(--header-offset));
@@ -390,10 +386,6 @@ h2, p, figure {
 }
 
 @media (max-width: 780px) {
-    .section-shell {
-        width: min(36rem, calc(100% - 32px));
-    }
-
     .hero {
         row-gap: .75rem;
         padding-block: 2.75rem 1rem;
