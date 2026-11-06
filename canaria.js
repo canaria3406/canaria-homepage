@@ -9,12 +9,16 @@
  *                  Optional labels: data-label-to-dark / data-label-to-light on the button.
  *   page language  <html data-langs="zh-Hant zh-Hans ja en"> picks a language from ?lang=,
  *                  the saved choice or the browser, and sets <html lang> before the first paint.
- *   language menu  [data-lang-switch] without `hidden`. data-lang-scope="page" (default) switches
- *                  the page language; "content" only reports the choice to the site's own code.
- *                  data-lang-storage (default "lang") and data-lang-label configure it; each
- *                  option needs data-lang and data-short.
+ *                  The choice is saved under <html data-lang-storage> (default "lang").
+ *   language menu  every [data-lang-switch] that has no `hidden` attribute when the page loads.
+ *                  data-lang-scope="page" (default) switches the page language and saves it under
+ *                  the page's key above; "content" only reports the choice to the site's own code
+ *                  and saves it under the menu's data-lang-storage (default "content-lang").
+ *                  Menus with the same scope and key stay in sync. data-lang-label sets the
+ *                  button's accessible name; each option needs data-lang and data-short.
  *   translations   Canaria.i18n.define(dictionaries) fills [data-i18n], [data-i18n-html] and
- *                  [data-i18n-aria]; the default language's text stays in the HTML.
+ *                  [data-i18n-aria]; the default language's text stays in the HTML. After adding
+ *                  such elements (with default-language text), call Canaria.i18n.apply().
  *
  * Events on document: canaria:themechange { theme }, canaria:langchange { lang, scope, initial }.
  */
@@ -70,7 +74,9 @@
     }
 
     /* ---------- Page language (only with <html data-langs>) ---------- */
-    const PAGE_LANG_KEY = 'lang';
+    // Read at load and written by page-scope menus, so a saved choice survives a reload.
+    const PAGE_LANG_KEY = root.dataset.langStorage || 'lang';
+    const CONTENT_LANG_KEY = 'content-lang';
     const pageLangs = (root.dataset.langs || '').split(/\s+/).filter(Boolean);
 
     function detectPageLang() {
@@ -97,7 +103,7 @@
         lang: null,
         defaultLang: pageLangs[0] || root.lang || 'zh-Hant',
         dictionaries: {},
-        originals: null
+        defined: false
     };
     if (pageLangs.length) {
         i18n.lang = detectPageLang();
@@ -116,21 +122,26 @@
         return typeof value === 'string' ? value : undefined;
     };
 
-    function captureOriginals() {
-        if (i18n.originals) return;
-        const originals = new Map();
-        document.querySelectorAll('[data-i18n]').forEach((el) => originals.set(el, { text: el.textContent }));
-        document.querySelectorAll('[data-i18n-html]').forEach((el) => originals.set(el, { html: el.innerHTML }));
-        document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
-            const entry = originals.get(el) || {};
-            entry.aria = el.getAttribute('aria-label');
+    // Default-language content, recorded the first time each element is translated, so elements
+    // added after define() can still switch back. A WeakMap lets removed elements be collected.
+    const originals = new WeakMap();
+    const READ = {
+        text: (el) => el.textContent,
+        html: (el) => el.innerHTML,
+        aria: (el) => el.getAttribute('aria-label')
+    };
+    function original(el, kind) {
+        let entry = originals.get(el);
+        if (!entry) {
+            entry = {};
             originals.set(el, entry);
-        });
-        i18n.originals = originals;
+        }
+        if (!(kind in entry)) entry[kind] = READ[kind](el);
+        return entry[kind];
     }
 
     function applyTranslations() {
-        if (!i18n.originals) return;
+        if (!i18n.defined) return;
         const isDefault = i18n.lang === i18n.defaultLang;
         const translated = (key) => {
             if (isDefault) return undefined;
@@ -138,13 +149,19 @@
             return typeof value === 'string' ? value : undefined;
         };
         document.querySelectorAll('[data-i18n]').forEach((el) => {
-            el.textContent = translated(el.dataset.i18n) ?? i18n.originals.get(el).text;
+            const fallback = original(el, 'text');
+            el.textContent = translated(el.dataset.i18n) ?? fallback;
         });
         document.querySelectorAll('[data-i18n-html]').forEach((el) => {
-            el.innerHTML = translated(el.dataset.i18nHtml) ?? i18n.originals.get(el).html;
+            const fallback = original(el, 'html');
+            el.innerHTML = translated(el.dataset.i18nHtml) ?? fallback;
         });
         document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
-            el.setAttribute('aria-label', translated(el.dataset.i18nAria) ?? i18n.originals.get(el).aria);
+            // Record the original first, even when a translation exists (e.g. the page opens in English).
+            const fallback = original(el, 'aria');
+            const value = translated(el.dataset.i18nAria) ?? fallback;
+            if (value === null) el.removeAttribute('aria-label');
+            else el.setAttribute('aria-label', value);
         });
     }
 
@@ -222,50 +239,63 @@
         else if (systemDark.addListener) systemDark.addListener(followSystem);
     }
 
-    /* ---------- Language menu: a disclosure button plus a short list of buttons ---------- */
+    /* ---------- Language menus: a disclosure button plus a short list of buttons ---------- */
+    // Menus that share a scope and storage key form one group with one current language.
+    const langGroups = new Map();
+
+    function renderLangSwitches() {
+        langGroups.forEach((group) => group.views.forEach((view) => view.render()));
+    }
+
+    function selectLang(group, lang) {
+        group.lang = lang;
+        storage.set(group.storageKey, lang);
+        if (group.scope === 'page') setPageLang(lang);
+        renderLangSwitches();
+        emit('canaria:langchange', { lang, scope: group.scope, initial: false });
+    }
+
     function initLangSwitch(langSwitch) {
-        if (!langSwitch || langSwitch.hidden) return;
+        if (langSwitch.hidden) return;
         const trigger = langSwitch.querySelector('.lang-trigger');
         const current = langSwitch.querySelector('.lang-current');
         const options = Array.from(langSwitch.querySelectorAll('[data-lang]'));
         if (!trigger || !options.length) return;
 
         const scope = langSwitch.dataset.langScope === 'content' ? 'content' : 'page';
-        const storageKey = langSwitch.dataset.langStorage || PAGE_LANG_KEY;
-        const has = (lang) => options.some((option) => option.dataset.lang === lang);
-        let lang = scope === 'page' ? i18n.lang : storage.get(storageKey);
-        if (!has(lang)) {
-            const marked = options.find((option) => option.getAttribute('aria-current') === 'true');
-            lang = (marked || options[0]).dataset.lang;
+        if (scope === 'page' && langSwitch.dataset.langStorage && langSwitch.dataset.langStorage !== PAGE_LANG_KEY) {
+            console.warn('canaria.js: page-scope language menus save under <html data-lang-storage>; the menu\'s data-lang-storage is ignored.');
         }
+        const storageKey = scope === 'page' ? PAGE_LANG_KEY : (langSwitch.dataset.langStorage || CONTENT_LANG_KEY);
+        const id = scope + '\n' + storageKey;
+        if (!langGroups.has(id)) langGroups.set(id, { scope, storageKey, lang: null, views: [] });
+        const group = langGroups.get(id);
 
-        function render() {
-            const selected = options.find((option) => option.dataset.lang === lang);
-            const short = selected.dataset.short || selected.textContent.trim();
-            if (current) current.textContent = short;
-            const label = langSwitch.dataset.langLabel || text('langLabel') || builtIn('langLabel');
-            const separator = /^(zh|ja)/i.test(root.lang) ? '：' : ': ';
-            trigger.setAttribute('aria-label', label + separator + short);
-            options.forEach((option) => {
-                if (option.dataset.lang === lang) option.setAttribute('aria-current', 'true');
-                else option.removeAttribute('aria-current');
-            });
-        }
-
-        function select(next) {
-            lang = next;
-            storage.set(storageKey, next);
-            if (scope === 'page') setPageLang(next);
-            render();
-            emit('canaria:langchange', { lang, scope, initial: false });
-        }
+        group.views.push({
+            has: (lang) => options.some((option) => option.dataset.lang === lang),
+            fallback: () => (options.find((option) => option.getAttribute('aria-current') === 'true') || options[0]).dataset.lang,
+            render() {
+                const selected = options.find((option) => option.dataset.lang === group.lang);
+                if (selected) {
+                    const short = selected.dataset.short || selected.textContent.trim();
+                    if (current) current.textContent = short;
+                    const label = langSwitch.dataset.langLabel || text('langLabel') || builtIn('langLabel');
+                    const separator = /^(zh|ja)/i.test(root.lang) ? '：' : ': ';
+                    trigger.setAttribute('aria-label', label + separator + short);
+                }
+                options.forEach((option) => {
+                    if (option === selected) option.setAttribute('aria-current', 'true');
+                    else option.removeAttribute('aria-current');
+                });
+            }
+        });
 
         const isOpen = () => langSwitch.classList.contains('is-open');
 
         function open(focusTarget) {
             langSwitch.classList.add('is-open');
             trigger.setAttribute('aria-expanded', 'true');
-            const selected = options.find((option) => option.dataset.lang === lang) || options[0];
+            const selected = options.find((option) => option.dataset.lang === group.lang) || options[0];
             const target = focusTarget === 'last' ? options[options.length - 1] : selected;
             // Wait a frame so the menu is visible (focusable) before moving focus.
             requestAnimationFrame(() => target && target.focus());
@@ -290,7 +320,7 @@
         });
         options.forEach((option, index) => {
             option.addEventListener('click', () => {
-                select(option.dataset.lang);
+                selectLang(group, option.dataset.lang);
                 close(true);
             });
             option.addEventListener('keydown', (event) => {
@@ -319,10 +349,19 @@
         document.addEventListener('click', (event) => {
             if (!langSwitch.contains(event.target)) close(false);
         });
+    }
 
-        if (scope === 'page' && lang !== i18n.lang) setPageLang(lang);
-        render();
-        emit('canaria:langchange', { lang, scope, initial: true });
+    function initLangSwitches() {
+        document.querySelectorAll('[data-lang-switch]').forEach(initLangSwitch);
+        langGroups.forEach((group) => {
+            const first = group.views[0];
+            let lang = group.scope === 'page' ? i18n.lang : storage.get(group.storageKey);
+            if (!first.has(lang)) lang = first.fallback();
+            group.lang = lang;
+            if (group.scope === 'page' && lang !== i18n.lang) setPageLang(lang);
+        });
+        renderLangSwitches();
+        langGroups.forEach((group) => emit('canaria:langchange', { lang: group.lang, scope: group.scope, initial: true }));
     }
 
     /* ---------- Wire up controls once the page is parsed ---------- */
@@ -333,7 +372,7 @@
             });
         });
         updateThemeToggles();
-        initLangSwitch(document.querySelector('[data-lang-switch]'));
+        initLangSwitches();
     });
 
     window.Canaria = {
@@ -350,12 +389,15 @@
             define(dictionaries, options = {}) {
                 i18n.dictionaries = dictionaries || {};
                 if (options.defaultLang) i18n.defaultLang = options.defaultLang;
+                i18n.defined = true;
                 onReady(() => {
-                    captureOriginals();
                     applyTranslations();
                     updateThemeToggles();
+                    renderLangSwitches();
                 });
             },
+            // Translate elements added after define(); they should hold default-language text.
+            apply: () => applyTranslations(),
             t: (key) => lookup(key)
         }
     };
