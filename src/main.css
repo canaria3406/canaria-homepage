@@ -1,4 +1,4 @@
-/* canaria.cc page styles. Shared header, footer and tokens live in /canaria.css. */
+/* canaria.cc page styles. Shared header, footer, tokens and content type live in /canaria.css. */
 :root {
     --blue: #6c9bd2;
     --sky: #8ac4de;
@@ -8,9 +8,10 @@
     --paper: var(--ui-bg);
     --line: var(--ui-line);
     --surface: #f1f6f8;
-    --tint: #dfedf3;
+    --tint: var(--ui-tint);
     --project-art-bg: radial-gradient(ellipse, var(--surface), transparent 75%), var(--tint);
     --hover: #d3e7ef;
+    --row-hover: rgba(46, 72, 113, .045);
     --line-strong: rgba(64, 106, 145, .36);
     --glow: rgba(75, 140, 186, .17);
     --shadow: 0 24px 65px rgba(72, 103, 131, .20);
@@ -20,8 +21,8 @@
 
 :root[data-theme="dark"] {
     --surface: #2c2e33;
-    --tint: #33363d;
     --hover: #3c4048;
+    --row-hover: rgba(255, 255, 255, .04);
     --line-strong: rgba(187, 197, 214, .32);
     --glow: transparent;
     --shadow: 0 24px 65px rgba(32, 34, 40, .56);
@@ -33,11 +34,10 @@ html {
     scroll-padding-top: 6.5rem;
 }
 
+/* Font family and rhythm come from canaria.css. */
 body {
     color: var(--ink);
     background: radial-gradient(ellipse 48rem 38rem at 10% 6rem, var(--glow), transparent), var(--paper);
-    font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-    line-height: 1.65;
 }
 
 h2, p, figure {
@@ -135,6 +135,8 @@ h2, p, figure {
     /* Safari < 16 lacks overflow: clip; hidden keeps the list from extending the page there. */
     overflow: hidden;
     overflow: clip;
+    /* The lyrics keep their own font; the rest of the page uses the shared --ui-font. */
+    font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
     text-align: center;
     -webkit-mask-image: linear-gradient(transparent, var(--ink) var(--lyric-fade),
         var(--ink) calc(100% - var(--lyric-fade)), transparent);
@@ -213,6 +215,8 @@ h2, p, figure {
     transform: translateY(.25rem);
 }
 
+/* ---------- Projects ----------
+   Sizes follow canaria.css's content type: one large title, small muted copy, hairline rules. */
 .details {
     padding-block: clamp(3rem, 6vw, 5rem);
 }
@@ -220,32 +224,23 @@ h2, p, figure {
 .projects {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(.875rem, 2vw, 1.5rem);
-}
-
-/* Project cards use the shared .ui-panel material from canaria.css. */
-.project-feature, .project-list {
-    font-family: var(--ui-font);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+    gap: 24px;
 }
 
 .project-feature {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    gap: 1.25rem;
-    padding: clamp(1.25rem, 3vw, 2rem);
+    padding: 28px;
 }
 
 .project-art {
     position: relative;
-    flex: 1 1 auto;
     width: 100%;
     min-width: 0;
     aspect-ratio: 1870 / 841;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 14px;
     background: var(--project-art-bg);
 }
 
@@ -257,35 +252,50 @@ h2, p, figure {
     object-fit: cover;
 }
 
-.project-feature-copy {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+.project-feature-top {
+    display: flex;
     align-items: center;
-    gap: .7rem .75rem;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.project-kind {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.project-feature-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding-top: 24px;
 }
 
 .project-feature h2 {
-    font-size: clamp(1.35rem, 2.5vw, 1.85rem);
-    line-height: 1.1;
-    letter-spacing: -.035em;
-    /* Balance the lowercase wordmark's visible glyphs with the centered robot icon. */
-    transform: translateY(-.05em);
+    margin-top: 6px;
+    color: var(--ui-ink);
+    font-size: 34px;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: -.03em;
 }
 
-.project-feature-copy > p {
-    grid-column: 1 / -1;
-}
-
-.project-feature-copy > p, .project-row p {
+.project-feature-body > p {
+    margin-block: 10px 22px;
     color: var(--muted);
-    font-size: .9rem;
-    line-height: 1.55;
+    font-size: 14px;
+    line-height: 1.8;
 }
 
-/* Layout only; the look comes from .ui-stats--inline in canaria.css. */
+/* Numbers and labels stay on one line, like a footnote under the summary. It sits at the
+   card's bottom edge when the list beside it is taller. */
 .project-stats {
-    grid-column: 1 / -1;
-    margin-top: .3rem;
+    flex-wrap: nowrap;
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--ui-panel-line);
 }
 
 .project-list {
@@ -301,18 +311,19 @@ h2, p, figure {
     border-top: 1px solid var(--ui-panel-line);
 }
 
+/* Title over summary, one size step below the feature card; the arrow sits at the row's middle. */
 .project-row {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-content: center;
-    column-gap: .75rem;
+    column-gap: 16px;
     height: 100%;
-    padding: .9rem clamp(.85rem, 2vw, 1.4rem);
+    padding: 20px 28px;
     transition: background .2s ease;
 }
 
 .project-row:hover {
-    background: var(--tint);
+    background: var(--row-hover);
 }
 
 .project-row:focus-visible {
@@ -320,50 +331,42 @@ h2, p, figure {
 }
 
 .project-row h2 {
-    margin-bottom: .2rem;
-    font-size: 1.05rem;
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: -.015em;
+    grid-area: 1 / 1;
+    color: var(--ui-ink);
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: -.02em;
     overflow-wrap: anywhere;
 }
 
-.project-row h2, .project-row p {
-    grid-column: 2;
+.project-row > p {
+    grid-area: 2 / 1;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
 }
 
-.project-row .project-icon, .project-arrow {
-    grid-row: 1 / span 2;
+.project-row .project-arrow {
+    grid-area: 1 / 2 / 3 / 3;
     align-self: center;
 }
 
-.project-icon, .project-arrow {
+.project-arrow {
     display: grid;
     place-items: center;
-    color: var(--accent);
-}
-
-.project-icon {
-    grid-column: 1;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--tint);
-}
-
-.project-arrow {
-    grid-column: 3;
-    width: 1.9rem;
-    height: 1.9rem;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
     color: var(--muted);
     transition: color .2s ease, transform .2s ease;
 }
 
 .project-arrow svg {
     display: block;
-    width: 1rem;
-    height: 1rem;
+    width: 15px;
+    height: 15px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.5;
@@ -371,9 +374,9 @@ h2, p, figure {
     stroke-linejoin: round;
 }
 
-.project-row:is(:hover, :focus-visible) .project-arrow {
+:is(.project-row, .project-feature):is(:hover, :focus-visible) .project-arrow {
     transform: translate(2px, -2px);
-    color: var(--accent);
+    color: var(--ui-accent-ink);
 }
 
 /* Footer: canaria.cc keeps the copyright and its single link on one line. */
@@ -406,29 +409,49 @@ h2, p, figure {
 
     .projects {
         grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
     }
 
     .project-list {
         grid-auto-rows: auto;
     }
-
-    .project-row h2 {
-        font-size: 1rem;
-    }
-
-    .project-row p {
-        font-size: .8125rem;
-        line-height: 1.65;
-    }
 }
 
 @media (max-width: 680px) {
+    :root {
+        --ui-panel-radius: 16px;
+    }
+
     html {
         scroll-padding-top: 5.625rem;
     }
 
     .hero {
         --header-offset: 76px;
+    }
+
+    .project-feature {
+        padding: 20px;
+    }
+
+    .project-art {
+        border-radius: 10px;
+    }
+
+    .project-feature-body {
+        padding-top: 20px;
+    }
+
+    .project-feature h2 {
+        font-size: 30px;
+    }
+
+    .project-row {
+        padding: 18px 20px;
+    }
+
+    .project-row h2 {
+        font-size: 18px;
     }
 
     .footer-bottom {
@@ -446,12 +469,12 @@ h2, p, figure {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow {
+    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-row, .project-arrow {
         transition: none;
     }
 
     .hero-scroll:is(:hover, :focus-visible) i,
-    .project-row:is(:hover, :focus-visible) .project-arrow {
+    :is(.project-row, .project-feature):is(:hover, :focus-visible) .project-arrow {
         transform: none;
     }
 }

@@ -19,6 +19,9 @@
  *   translations   Canaria.i18n.define(dictionaries) fills [data-i18n], [data-i18n-html] and
  *                  [data-i18n-aria]; the default language's text stays in the HTML. After adding
  *                  such elements (with default-language text), call Canaria.i18n.apply().
+ *   reveal         every [data-reveal] in the page fades in the first time it scrolls into view.
+ *                  Skipped (content simply shows) without IntersectionObserver or with reduced
+ *                  motion. Call Canaria.reveal(element) for [data-reveal] elements added later.
  *
  * Events on document: canaria:themechange { theme }, canaria:langchange { lang, scope, initial }.
  */
@@ -364,6 +367,27 @@
         langGroups.forEach((group) => emit('canaria:langchange', { lang: group.lang, scope: group.scope, initial: true }));
     }
 
+    /* ---------- Reveal on scroll ---------- */
+    // The class goes on <html> before the first paint, so [data-reveal] content never flashes in
+    // and then hides. Without it (no observer, reduced motion) canaria.css leaves the content shown.
+    const reducedMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealObserver = 'IntersectionObserver' in window && !reducedMotion
+        ? new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.12 })
+        : null;
+    if (revealObserver) root.classList.add('ui-reveal-ready');
+
+    function reveal(element) {
+        if (!element) return;
+        if (revealObserver) revealObserver.observe(element);
+        else element.classList.add('is-visible');
+    }
+
     /* ---------- Wire up controls once the page is parsed ---------- */
     onReady(() => {
         document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
@@ -373,11 +397,13 @@
         });
         updateThemeToggles();
         initLangSwitches();
+        document.querySelectorAll('[data-reveal]').forEach(reveal);
     });
 
     window.Canaria = {
         version: '1',
         storage,
+        reveal,
         theme: {
             get: () => root.getAttribute('data-theme'),
             set: setTheme,

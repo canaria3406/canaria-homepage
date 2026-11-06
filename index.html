@@ -68,13 +68,16 @@
         </section>
 
         <div class="details">
-            <section class="section-shell projects" id="projects" aria-label="我的專案">
+            <section class="section-shell projects" id="projects" aria-label="我的專案" data-reveal>
                 <a class="project-feature ui-panel" href="https://ermiana.canaria.cc/" aria-labelledby="ermiana-title" aria-describedby="ermiana-description ermiana-stats">
                     <div class="project-art" aria-hidden="true">
                         <img src="src/projects/ermiana-banner.png" width="1870" height="841" loading="lazy" decoding="async" alt="">
                     </div>
-                    <div class="project-feature-copy">
-                        <span class="project-icon" aria-hidden="true"><i class="fas fa-robot"></i></span>
+                    <div class="project-feature-body">
+                        <div class="project-feature-top">
+                            <p class="project-kind ui-label"><i class="fas fa-robot" aria-hidden="true"></i>Discord Bot</p>
+                            <span class="project-arrow" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M4 16 16 4M4 4h12v12"></path></svg></span>
+                        </div>
                         <h2 id="ermiana-title">ermiana</h2>
                         <p id="ermiana-description">自動解析訊息中的連結，產生可直接在 Discord 閱讀的內容預覽</p>
                         <ul class="project-stats ui-stats ui-stats--inline" id="ermiana-stats" role="list" aria-label="專案規模">
@@ -87,7 +90,6 @@
                 <ul class="project-list ui-panel" role="list">
                     <li>
                         <a class="project-row" href="https://github.com/canaria3406/hoyolab-auto-sign" aria-labelledby="hoyolab-title" aria-describedby="hoyolab-description">
-                            <span class="project-icon" aria-hidden="true"><i class="fas fa-calendar-check"></i></span>
                             <h2 id="hoyolab-title">hoyolab-auto-sign</h2>
                             <p id="hoyolab-description">自動領取 HoYoLAB 每日簽到獎勵的開源工具</p>
                             <span class="project-arrow" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M4 16 16 4M4 4h12v12"></path></svg></span>
@@ -95,15 +97,13 @@
                     </li>
                     <li>
                         <a class="project-row" href="https://github.com/canaria3406/canaria-url" aria-labelledby="url-title" aria-describedby="url-description">
-                            <span class="project-icon" aria-hidden="true"><i class="fas fa-link"></i></span>
                             <h2 id="url-title">canaria-url</h2>
-                            <p id="url-description">用 Google Apps Script 和試算表打造的免費開源短網址服務</p>
+                            <p id="url-description">用 GAS 和試算表打造的免費開源短網址服務</p>
                             <span class="project-arrow" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M4 16 16 4M4 4h12v12"></path></svg></span>
                         </a>
                     </li>
                     <li>
                         <a class="project-row" href="https://tda.canaria.cc/" aria-labelledby="ticket-title" aria-describedby="ticket-description">
-                            <span class="project-icon" aria-hidden="true"><i class="fas fa-chart-line"></i></span>
                             <h2 id="ticket-title">Ticket Decision Analysis</h2>
                             <p id="ticket-description">使用賽局理論分析 CD 抽票的中獎機率與購買策略</p>
                             <span class="project-arrow" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M4 16 16 4M4 4h12v12"></path></svg></span>
@@ -111,7 +111,6 @@
                     </li>
                     <li>
                         <a class="project-row" href="https://nakiri.canaria.cc/" aria-labelledby="nakiri-title" aria-describedby="nakiri-description">
-                            <span class="project-icon" aria-hidden="true"><i class="fas fa-broadcast-tower"></i></span>
                             <h2 id="nakiri-title">百鬼今天開台了嗎</h2>
                             <p id="nakiri-description">查看百鬼あやめ的直播狀態，以及距離上次開台的時間</p>
                             <span class="project-arrow" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M4 16 16 4M4 4h12v12"></path></svg></span>

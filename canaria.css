@@ -10,8 +10,9 @@
  * Public API (keep backwards compatible; breaking changes go to /v2/):
  *   - class names: .section-shell .skip-link .site-header .brand .header-tools .header-prefs
  *     .lang-switch .theme-toggle .nav-cta .site-footer .footer-* .ui-panel .ui-stats
+ *     .ui-label .ui-heading .ui-lede .ui-text-link .ui-badge .ui-icon
  *   - --ui-* custom properties
- *   - data-* attributes read by canaria.js
+ *   - data-* attributes read by canaria.js, including [data-reveal]
  *
  * Defaults are canaria.cc's own colors. Other sites override --ui-* in their main.css:
  * light values on :root and dark values on :root[data-theme="dark"]. Write both, because
@@ -29,6 +30,12 @@
     --ui-line: rgba(64, 106, 145, .20);       /* header and menu borders */
     --ui-divider: var(--ui-line);             /* footer bottom rule */
     --ui-glass: rgba(242, 247, 249, .84);     /* header background */
+
+    /* Content type (.ui-label, .ui-heading, ...) */
+    --ui-ink: #1c2f5a;                        /* headings, titles and numbers */
+    --ui-accent-ink: var(--ui-accent);        /* labels, links and icons in content */
+    --ui-line-strong: rgba(46, 72, 113, .3);  /* text link underline */
+    --ui-tint: #dfedf3;                       /* icon tiles */
 
     /* Language and theme controls */
     --ui-menu-bg: #f1f6f8;
@@ -76,7 +83,7 @@
     /* Stats (.ui-stats) */
     --ui-stats-tile-bg: var(--ui-glass);
     --ui-stats-tile-inset: var(--ui-panel-inset);
-    --ui-stats-accent: var(--ui-accent);
+    --ui-stats-accent: var(--ui-accent-ink);
 
     /* Skip link */
     --ui-skip-bg: #9fd0de;
@@ -91,6 +98,9 @@
     --ui-accent: #c0c9da;
     --ui-line: rgba(181, 190, 205, .19);
     --ui-glass: rgba(44, 46, 51, .94);
+    --ui-ink: #e8eaf0;
+    --ui-line-strong: rgba(187, 197, 214, .32);
+    --ui-tint: #33363d;
     --ui-menu-bg: #2c2e33;
     --ui-menu-shadow: 0 18px 45px rgba(32, 34, 40, .40);
     --ui-pref-bg: #33363d;
@@ -137,6 +147,9 @@ html {
 }
 body {
     margin: 0;
+    font-family: var(--ui-font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 a {
     color: inherit;
@@ -260,6 +273,7 @@ a {
     border-radius: 9px;
     background: transparent;
     color: var(--ui-pref-ink);
+    font-family: inherit;
     cursor: pointer;
     transition: background .2s ease, color .2s ease;
 }
@@ -569,7 +583,7 @@ a {
     border-inline-start: 1px solid var(--ui-panel-line);
 }
 .ui-stats--inline strong {
-    color: var(--ui-brand-ink);
+    color: var(--ui-ink);
     font-size: .9rem;
     font-weight: 600;
 }
@@ -637,6 +651,80 @@ a {
     vertical-align: 3px;
 }
 
+/* ---------- Content type (from ermiana.canaria.cc) ----------
+   One large, heavy heading per block; everything around it stays small and muted.
+   Text sizes step in whole pixels (10/11/12/13/14/15/16px), headings jump to 26-40px.
+   Paragraphs open up to line-height 1.8-1.9; one-line labels and titles stay at 1.25-1.6. */
+.ui-label {
+    margin: 0 0 15px;
+    color: var(--ui-accent-ink);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.ui-heading {
+    margin: 0;
+    color: var(--ui-ink);
+    font-size: clamp(28px, 3.1vw, 40px);
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+}
+.ui-lede {
+    max-width: 465px;
+    margin: 22px 0 0;
+    color: var(--ui-muted);
+    font-size: 15px;
+    line-height: 1.9;
+}
+.ui-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--ui-line-strong);
+    color: var(--ui-accent-ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+.ui-text-link:hover {
+    border-color: var(--ui-accent-ink);
+}
+/* Small bordered tag, e.g. "admin only". */
+.ui-badge {
+    padding: 2px 5px;
+    border: 1px solid var(--ui-line);
+    border-radius: 4px;
+    color: var(--ui-muted);
+    font-size: 10px;
+    white-space: nowrap;
+}
+/* 40px tinted square holding an icon or a glyph. */
+.ui-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ui-line);
+    border-radius: 10px;
+    background: var(--ui-tint);
+    color: var(--ui-accent-ink);
+}
+
+/* ---------- Reveal on scroll: canaria.js adds .ui-reveal-ready to <html> ---------- */
+.ui-reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .25, 1);
+}
+.ui-reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 980px) {
     .footer-main {
@@ -645,6 +733,9 @@ a {
     }
     .footer-actions {
         justify-content: flex-start;
+    }
+    .ui-heading {
+        font-size: 30px;
     }
 }
 
@@ -715,6 +806,12 @@ a {
     }
     .footer-legal {
         gap: 10px 14px;
+    }
+    .ui-heading {
+        font-size: 28px;
+    }
+    .ui-lede {
+        font-size: 14px;
     }
 }
 
