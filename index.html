@@ -1,19 +1,51 @@
 <!doctype html>
 <html lang="zh-Hant" id="top">
 <head>
+    <!-- Document metadata -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f5f8fa">
-    <meta name="description" content="かなりあ個人首頁">
     <title>かなりあ</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="src/logo/apple-touch-icon-next.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="src/logo/favicon-32x32-next.png">
+    <meta name="description" content="かなりあ的個人首頁">
+    <meta name="theme-color" content="#f5f8fa">
+    <link rel="canonical" href="https://canaria.cc/">
+    <!-- Social previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="canaria.cc">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:url" content="https://canaria.cc/">
+    <meta property="og:title" content="かなりあ">
+    <meta property="og:description" content="かなりあ的個人首頁">
+    <meta property="og:image" content="https://canaria.cc/src/logo/img.webp">
+    <meta property="og:image:type" content="image/webp">
+    <meta property="og:image:width" content="128">
+    <meta property="og:image:height" content="128">
+    <meta property="og:image:alt" content="かなりあ的個人頭像">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="canaria.cc">
+    <meta name="twitter:title" content="かなりあ">
+    <meta name="twitter:description" content="かなりあ的個人首頁">
+    <!-- Icons -->
     <link rel="icon" type="image/png" sizes="16x16" href="src/logo/favicon-16x16-next.png">
-    <link rel="mask-icon" href="src/logo/logo.svg" color="#6c9bd2">
+    <link rel="icon" type="image/png" sizes="32x32" href="src/logo/favicon-32x32-next.png">
+    <link rel="apple-touch-icon" href="src/logo/apple-touch-icon-next.png">
+    <!-- Structured data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "かなりあ",
+            "url": "https://canaria.cc/"
+        }
+    </script>
+    <!-- Styles: shared UI, page styles, then icons. -->
     <link rel="stylesheet" href="canaria.css?v=1">
     <link rel="stylesheet" href="src/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Set the theme before paint; defer DOM-dependent scripts in dependency order.
+         main.js loads the YouTube API itself, after defining its ready callback. -->
     <script src="canaria.js?v=1"></script>
+    <script src="src/lyric_01.js" defer></script>
+    <script src="src/main.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main">跳至主要內容</a>
@@ -148,7 +180,5 @@
             </div>
         </div>
     </footer>
-    <script src="src/lyric_01.js"></script>
-    <script src="src/main.js"></script>
 </body>
 </html>
