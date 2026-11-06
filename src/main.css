@@ -1,45 +1,39 @@
+/* canaria.cc page styles. Shared header, footer and tokens live in /canaria.css. */
 :root {
-    color-scheme: light;
     --blue: #6c9bd2;
     --sky: #8ac4de;
-    --mist: #9fd0de;
-    --ink: #354b61;
-    --muted: #4e6476;
-    --accent: #3f6285;
-    --button-ink: #323e4d;
-    --paper: #f5f8fa;
+    --ink: var(--ui-brand-ink);
+    --muted: var(--ui-muted);
+    --accent: var(--ui-accent);
+    --paper: var(--ui-bg);
+    --line: var(--ui-line);
     --surface: #f1f6f8;
     --tint: #dfedf3;
     --project-art-bg: radial-gradient(ellipse, var(--surface), transparent 75%), var(--tint);
     --hover: #d3e7ef;
-    --line: rgba(64, 106, 145, .20);
     --line-strong: rgba(64, 106, 145, .36);
-    --glass: rgba(242, 247, 249, .84);
-    --panel-glass: rgba(255, 255, 255, .76);
-    --panel-glass-strong: rgba(245, 248, 250, .90);
-    --panel-tint: rgba(239, 245, 247, .82);
-    --panel-line: rgba(46, 72, 113, .18);
-    --panel-line-hover: rgba(46, 72, 113, .40);
-    --panel-inset: rgba(255, 255, 255, .84);
     --glow: rgba(75, 140, 186, .17);
     --shadow: 0 24px 65px rgba(72, 103, 131, .20);
-    --panel-shadow: 0 18px 45px rgba(46, 72, 113, .09);
-    --panel-hover-shadow: 0 20px 48px rgba(46, 72, 113, .12);
     --video-surface: var(--blue);
     --video-glow: var(--sky);
 }
 
-* {
-    box-sizing: border-box;
+:root[data-theme="dark"] {
+    --surface: #2c2e33;
+    --tint: #33363d;
+    --hover: #3c4048;
+    --line-strong: rgba(187, 197, 214, .32);
+    --glow: transparent;
+    --shadow: 0 24px 65px rgba(32, 34, 40, .56);
+    --video-surface: #30343c;
+    --video-glow: rgba(145, 157, 179, .25);
 }
 
 html {
-    scroll-behavior: smooth;
     scroll-padding-top: 6.5rem;
 }
 
 body {
-    margin: 0;
     color: var(--ink);
     background: radial-gradient(ellipse 48rem 38rem at 10% 6rem, var(--glow), transparent), var(--paper);
     font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -48,37 +42,6 @@ body {
 
 h2, p, figure {
     margin: 0;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-}
-
-.section-shell {
-    width: min(1180px, calc(100% - 48px));
-    margin-inline: auto;
-}
-
-.skip-link {
-    position: fixed;
-    top: .75rem;
-    left: .75rem;
-    z-index: 100;
-    transform: translateY(-180%);
-    padding: .5rem 1rem;
-    border-radius: 8px;
-    background: var(--mist);
-    color: var(--button-ink);
-}
-
-.skip-link:focus {
-    transform: none;
 }
 
 .hero {
@@ -260,16 +223,11 @@ a {
     gap: clamp(.875rem, 2vw, 1.5rem);
 }
 
-.project-feature, .project-list, .site-footer {
-    background: linear-gradient(125deg, var(--panel-glass-strong), var(--panel-tint));
-}
-
+/* Project cards use the shared .ui-panel material from canaria.css. */
 .project-feature, .project-list {
-    border: 1px solid var(--panel-line);
-    border-radius: 22px;
-    box-shadow: var(--panel-shadow), inset 0 1px 0 var(--panel-inset);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    font-family: var(--ui-font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 .project-feature {
@@ -278,12 +236,6 @@ a {
     min-width: 0;
     gap: 1.25rem;
     padding: clamp(1.25rem, 3vw, 2rem);
-    transition: border-color .2s ease, box-shadow .2s ease;
-}
-
-.project-feature:is(:hover, :focus-visible) {
-    border-color: var(--panel-line-hover);
-    box-shadow: var(--panel-hover-shadow), inset 0 1px 0 var(--panel-inset);
 }
 
 .project-art {
@@ -330,37 +282,10 @@ a {
     line-height: 1.55;
 }
 
+/* Layout only; the look comes from .ui-stats--inline in canaria.css. */
 .project-stats {
     grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem 0;
-    margin: .3rem 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.project-stats li {
-    display: inline-flex;
-    align-items: baseline;
-    gap: .4rem;
-    color: var(--muted);
-    font-size: .78rem;
-    line-height: 1.5;
-    white-space: nowrap;
-}
-
-.project-stats li + li {
-    margin-inline-start: .875rem;
-    padding-inline-start: .875rem;
-    border-inline-start: 1px solid var(--panel-line);
-}
-
-.project-stats strong {
-    color: var(--ink);
-    font-size: .9rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+    margin-top: .3rem;
 }
 
 .project-list {
@@ -373,7 +298,7 @@ a {
 }
 
 .project-list li + li {
-    border-top: 1px solid var(--panel-line);
+    border-top: 1px solid var(--ui-panel-line);
 }
 
 .project-row {
@@ -435,8 +360,7 @@ a {
     transition: color .2s ease, transform .2s ease;
 }
 
-.project-arrow svg,
-.footer-action svg {
+.project-arrow svg {
     display: block;
     width: 1rem;
     height: 1rem;
@@ -452,177 +376,16 @@ a {
     color: var(--accent);
 }
 
-/* Footer styles reused from ermiana-homepage/src/main.css. */
-:root[data-theme="light"] .site-footer {
-    --footer-action-bg: rgba(255, 255, 255, .85);
-    --footer-action-border: rgba(46, 72, 113, .22);
-    --footer-action-ink: #2e4871;
-    --footer-action-hover-bg: #e8f1f3;
-    --footer-action-hover-border: #a0b7c9;
-    --footer-action-hover-ink: #1c2f5a;
-    --footer-primary-bg: #2e4871;
-    --footer-primary-hover: #366182;
-    --footer-primary-ink: var(--paper);
-}
-
-.site-footer {
-    margin-bottom: 28px;
-    padding: 36px;
-    font-size: 13px;
-    border: 1px solid var(--panel-line);
-    border-radius: 26px;
-    box-shadow: var(--panel-shadow), inset 0 1px 0 var(--panel-inset);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    color: var(--muted);
-}
-
-.site-footer.section-shell {
-    width: min(1180px, calc(100% - 40px));
-}
-.footer-main {
-    display: grid;
-    grid-template-columns: minmax(260px, 1fr) minmax(420px, auto);
-    gap: 48px;
-    align-items: center;
-}
-.footer-brand .brand {
-    font-size: 22px;
-}
-.footer-brand > p {
-    max-width: 370px;
-    margin: 15px 0 0;
-    font-size: 14px;
-    color: var(--muted);
-}
-.footer-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 8px;
-}
-.footer-action {
-    min-height: 42px;
-    padding: 0 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    border: 1px solid var(--footer-action-border, var(--line));
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 750;
-    transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
-    background: var(--footer-action-bg, var(--surface));
-    color: var(--footer-action-ink, var(--accent));
-}
-.footer-action svg {
-    width: 1em;
-    height: 1em;
-}
-.footer-action:hover {
-    transform: translateY(-2px);
-    border-color: var(--footer-action-hover-border, var(--line-strong));
-    background: var(--footer-action-hover-bg, var(--hover));
-    color: var(--footer-action-hover-ink, var(--ink));
-}
-.footer-action-primary {
-    border-color: var(--footer-primary-bg, var(--line));
-    background: var(--footer-primary-bg, var(--mist));
-    color: var(--footer-primary-ink, var(--button-ink));
-}
-.footer-action-primary:hover {
-    border-color: var(--footer-primary-hover, var(--line-strong));
-    background: var(--footer-primary-hover, var(--sky));
-    color: var(--footer-primary-ink, var(--button-ink));
-}
-.footer-bottom {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-}
+/* Footer: canaria.cc keeps the copyright and its single link on one line. */
 .footer-bottom p {
-    margin: 0;
-    color: inherit;
-    font-weight: 700;
     white-space: nowrap;
 }
-.footer-at {
-    display: inline-block;
-    margin-inline: 2px;
-}
+
 .footer-meta {
-    display: flex;
     flex-shrink: 0;
-    align-items: center;
-    gap: 24px;
-}
-.footer-legal {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 14px;
-}
-.footer-legal a {
-    color: var(--muted);
-    text-decoration: none;
-}
-.footer-legal a:hover {
-    color: var(--accent);
-}
-
-.site-footer a:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-}
-@media (max-width: 980px) {
-    .footer-main {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    .footer-actions {
-        justify-content: flex-start;
-    }
-}
-
-@media (max-width: 680px) {
-    .site-footer.section-shell {
-        width: calc(100% - 32px);
-    }
-
-    .site-footer {
-        grid-template-columns: 1fr;
-        gap: 38px;
-        margin-bottom: 16px;
-        padding: 26px 20px;
-    }
-    .footer-bottom {
-        gap: 12px;
-    }
-    .footer-main {
-        gap: 26px;
-    }
-    .footer-actions {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .footer-action {
-        padding-inline: 10px;
-    }
-    .footer-legal {
-        gap: 10px 14px;
-    }
 }
 
 @media (max-width: 780px) {
-    .section-shell {
-        width: min(36rem, calc(100% - 32px));
-    }
-
     .hero {
         row-gap: .75rem;
         padding-block: 2.75rem 1rem;
@@ -667,20 +430,28 @@ a {
     .hero {
         --header-offset: 76px;
     }
+
+    .footer-bottom {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .footer-meta {
+        width: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-
-    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow, .footer-action {
+    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow {
         transition: none;
     }
 
     .hero-scroll:is(:hover, :focus-visible) i,
-    .project-row:is(:hover, :focus-visible) .project-arrow,
-    .footer-action:hover {
+    .project-row:is(:hover, :focus-visible) .project-arrow {
         transform: none;
     }
 }

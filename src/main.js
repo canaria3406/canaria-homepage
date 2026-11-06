@@ -9,11 +9,6 @@ const lyricMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const LYRIC_MOVE = { duration: 460, easing: "cubic-bezier(.22, .61, .36, 1)" };
 lyricViewport.style.setProperty("--lyric-move-easing", LYRIC_MOVE.easing);
 
-const langSwitch = document.querySelector('[data-lang-switch]');
-const langTrigger = langSwitch.querySelector('.lang-trigger');
-const langCurrent = langSwitch.querySelector('.lang-current');
-const langOptions = Array.from(langSwitch.querySelectorAll('[data-lang]'));
-const LANG_SHORT = { 'zh-Hant': '繁中', ja: '日本語' };
 const videoFallback = document.querySelector(".video-fallback");
 const videoPoster = document.createElement("img");
 videoPoster.className = "video-poster";
@@ -22,10 +17,8 @@ videoFallback.prepend(videoPoster);
 
 let player;
 let currentTrack;
+// The lyric language comes from the shared language menu (canaria.js, data-lang-scope="content").
 let currentLang = "zh-Hant";
-try {
-    if (localStorage.getItem("lyric-language") === "ja") currentLang = "ja";
-} catch { /* storage unavailable */ }
 let lyrics = [];
 let activeLine = -1;
 let activeTop = 0; // Last translation target; resizes re-align only when the layout moves it.
@@ -152,87 +145,17 @@ videoPoster.addEventListener("load", () => {
 });
 
 function applyLang(lang) {
+    if (!currentTrack.lyrics[lang]) return;
     currentLang = lang;
-    langCurrent.textContent = LANG_SHORT[currentLang];
-    langTrigger.setAttribute('aria-label', '歌詞語言：' + LANG_SHORT[currentLang]);
-    langOptions.forEach((option) => {
-        if (option.dataset.lang === currentLang) option.setAttribute('aria-current', 'true');
-        else option.removeAttribute('aria-current');
-    });
     renderLyrics(player?.getCurrentTime?.() ?? 0);
 }
 
-/* Language popover: a disclosure button plus a short list of buttons. */
-function isLangMenuOpen() {
-    return langSwitch && langSwitch.classList.contains('is-open');
-}
-
-function openLangMenu(focusTarget) {
-    if (!langSwitch) return;
-    langSwitch.classList.add('is-open');
-    langTrigger.setAttribute('aria-expanded', 'true');
-    const current = langOptions.find((option) => option.dataset.lang === currentLang) || langOptions[0];
-    const target = focusTarget === 'last' ? langOptions[langOptions.length - 1] : current;
-    // Wait a frame so the menu is visible (focusable) before moving focus.
-    window.requestAnimationFrame(() => target && target.focus());
-}
-
-function closeLangMenu(returnFocus) {
-    if (!isLangMenuOpen()) return;
-    langSwitch.classList.remove('is-open');
-    langTrigger.setAttribute('aria-expanded', 'false');
-    if (returnFocus) langTrigger.focus();
-}
-
-if (langSwitch && langTrigger) {
-    langTrigger.addEventListener('click', () => {
-        if (isLangMenuOpen()) closeLangMenu(false);
-        else openLangMenu();
-    });
-    langTrigger.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-            event.preventDefault();
-            openLangMenu(event.key === 'ArrowUp' ? 'last' : undefined);
-        }
-    });
-    langOptions.forEach((option, index) => {
-        option.addEventListener('click', () => {
-            try {
-                localStorage.setItem('lyric-language', option.dataset.lang);
-            } catch { /* storage unavailable */ }
-            applyLang(option.dataset.lang);
-            closeLangMenu(true);
-        });
-        option.addEventListener('keydown', (event) => {
-            let next = null;
-            if (event.key === 'ArrowDown') next = langOptions[(index + 1) % langOptions.length];
-            else if (event.key === 'ArrowUp') next = langOptions[(index - 1 + langOptions.length) % langOptions.length];
-            else if (event.key === 'Home') next = langOptions[0];
-            else if (event.key === 'End') next = langOptions[langOptions.length - 1];
-            if (next) {
-                event.preventDefault();
-                next.focus();
-            }
-        });
-    });
-    langSwitch.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isLangMenuOpen()) {
-            event.preventDefault();
-            closeLangMenu(true);
-        }
-    });
-    // Close when keyboard focus moves elsewhere. Pointer clicks outside are handled below
-    // (relatedTarget is null for those, e.g. Safari doesn't focus buttons on click).
-    langSwitch.addEventListener('focusout', (event) => {
-        if (event.relatedTarget && !langSwitch.contains(event.relatedTarget)) closeLangMenu(false);
-    });
-    document.addEventListener('click', (event) => {
-        if (!langSwitch.contains(event.target)) closeLangMenu(false);
-    });
-}
+// canaria.js reports the saved choice once the page is parsed, then every change.
+document.addEventListener("canaria:langchange", (event) => applyLang(event.detail.lang));
 
 selectTrack();
-applyLang(currentLang);
+// Without the shared script, show the default lyrics right away.
+if (!window.Canaria) applyLang(currentLang);
 
 window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player("ytplayer", {
