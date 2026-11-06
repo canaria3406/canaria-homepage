@@ -252,18 +252,24 @@ h2, p, figure {
     object-fit: cover;
 }
 
+/* Label over title; the arrow is centered on the two lines together. */
 .project-feature-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 16px;
 }
 
 .project-kind {
+    grid-area: 1 / 1;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     margin: 0;
+}
+
+.project-feature-top .project-arrow {
+    grid-area: 1 / 2 / 3 / 3;
+    align-self: center;
 }
 
 .project-feature-body {
@@ -274,9 +280,10 @@ h2, p, figure {
 }
 
 .project-feature h2 {
+    grid-area: 2 / 1;
     margin-top: 6px;
     color: var(--ui-ink);
-    font-size: 34px;
+    font-size: 30px;
     font-weight: 650;
     line-height: 1.25;
     letter-spacing: -.03em;
@@ -318,7 +325,7 @@ h2, p, figure {
     align-content: center;
     column-gap: 16px;
     height: 100%;
-    padding: 20px 28px;
+    padding: 18px 28px;
     transition: background .2s ease;
 }
 
@@ -333,7 +340,7 @@ h2, p, figure {
 .project-row h2 {
     grid-area: 1 / 1;
     color: var(--ui-ink);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 650;
     line-height: 1.35;
     letter-spacing: -.02em;
@@ -442,16 +449,8 @@ h2, p, figure {
         padding-top: 20px;
     }
 
-    .project-feature h2 {
-        font-size: 30px;
-    }
-
     .project-row {
-        padding: 18px 20px;
-    }
-
-    .project-row h2 {
-        font-size: 18px;
+        padding-inline: 20px;
     }
 
     .footer-bottom {
