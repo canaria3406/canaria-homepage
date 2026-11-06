@@ -453,7 +453,7 @@ a {
     border-radius: 12px;
     font-size: 12px;
     font-weight: 750;
-    transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
+    transition: border-color .2s ease, color .2s ease, background .2s ease;
     background: var(--ui-action-bg);
     color: var(--ui-action-ink);
 }
@@ -468,7 +468,6 @@ a {
     stroke-linejoin: round;
 }
 .footer-action:hover {
-    transform: translateY(-2px);
     border-color: var(--ui-action-hover-border);
     background: var(--ui-action-hover-bg);
     color: var(--ui-action-hover-ink);

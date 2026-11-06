@@ -446,13 +446,12 @@ h2, p, figure {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow, .footer-action {
+    .bg::before, .bg li, .hero-scroll, .hero-scroll i, .project-feature, .project-row, .project-arrow {
         transition: none;
     }
 
     .hero-scroll:is(:hover, :focus-visible) i,
-    .project-row:is(:hover, :focus-visible) .project-arrow,
-    .footer-action:hover {
+    .project-row:is(:hover, :focus-visible) .project-arrow {
         transform: none;
     }
 }
